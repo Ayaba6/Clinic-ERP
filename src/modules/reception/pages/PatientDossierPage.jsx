@@ -99,6 +99,9 @@ export default function PatientDossierPage() {
             </div>
             <p className="text-sm text-slate-500 mt-1">
               {patient.genre === 'F' ? 'Femme' : 'Homme'} • {getAge(patient.date_naissance) ?? '–'} ans • Dossier créé le {formatDate(patient.created_at)}
+              {patient.mere_id && (
+                <> • <Link to={`/patients/${patient.mere_id}`} className="text-pink-700 font-medium hover:underline">Dossier de la mère</Link></>
+              )}
             </p>
           </div>
         </div>

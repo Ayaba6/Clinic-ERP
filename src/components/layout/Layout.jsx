@@ -12,7 +12,8 @@ import {
   LogOut,
   ChevronDown,
   Settings,
-  Baby
+  Baby,
+  BedDouble
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -33,6 +34,7 @@ export default function Layout() {
   const menuItems = [
     { label: 'Réception & Patients', path: '/reception', icon: Users, roles: ['admin', 'reception', 'infirmier'] },
     { label: 'Maternité', path: '/maternite', icon: Baby, roles: ['admin', 'medecin', 'sage_femme', 'infirmier'] },
+    { label: 'Salle de naissance', path: '/naissance', icon: BedDouble, roles: ['admin', 'medecin', 'sage_femme', 'infirmier'] },
     { label: 'Consultations', path: '/consultation', icon: Stethoscope, roles: ['admin', 'medecin', 'sage_femme'] },
     { label: 'Pharmacie', path: '/pharmacie', icon: Pill, roles: ['admin', 'pharmacien'] },
     { label: 'Bloc Opératoire', path: '/bloc', icon: Activity, roles: ['admin', 'chirurgien', 'infirmier'] },

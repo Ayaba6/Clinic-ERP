@@ -8,10 +8,12 @@ import {
 import GrossesseFormModal from '../components/GrossesseFormModal'
 import CpnFormModal from '../components/CpnFormModal'
 import Alertes from '../components/Alertes'
+import AdmissionModal from '../../naissance/components/AdmissionModal'
+import { useAdmissionEnCours } from '../../naissance/hooks/useNaissance'
 import StatutBadge from '../../../components/ui/StatutBadge'
 import { titreSoignant } from '../../../lib/roles'
 import { getAge, formatDate, formatPersonne } from '../../../lib/format'
-import { ArrowLeft, Loader2, Plus, Pencil, FolderOpen, Archive, ChevronDown, ShieldAlert } from 'lucide-react'
+import { ArrowLeft, Loader2, Plus, Pencil, FolderOpen, Archive, ChevronDown, ShieldAlert, BedDouble } from 'lucide-react'
 
 export default function GrossessePage() {
   const { id } = useParams()
@@ -20,6 +22,8 @@ export default function GrossessePage() {
   const { profile } = useAuth()
   const canWrite = ['admin', 'medecin', 'sage_femme'].includes(profile?.role)
   const { grossesse: g, loading, error, fetchGrossesse } = useGrossesse(id)
+  const admission = useAdmissionEnCours(g?.statut === 'en_cours' ? g.patient_id : null)
+  const [admissionOpen, setAdmissionOpen] = useState(false)
 
   // ?passage=<id> : la patiente vient de la file d'attente, la CPN s'ouvre directement
   const passage = searchParams.get('passage')
@@ -103,6 +107,15 @@ export default function GrossessePage() {
               <button onClick={() => setCloture({ statut: 'accouchee', issue: '' })} className="inline-flex items-center gap-2 px-4 py-2.5 border border-slate-300 bg-white rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">
                 <Archive className="w-4 h-4" /> Clôturer
               </button>
+              {admission ? (
+                <Link to={`/naissance/${admission.id}`} className="inline-flex items-center gap-2 px-4 py-2.5 bg-pink-50 border border-pink-200 rounded-xl text-sm font-semibold text-pink-700 hover:bg-pink-100">
+                  <BedDouble className="w-4 h-4" /> En salle de naissance
+                </Link>
+              ) : (
+                <button onClick={() => setAdmissionOpen(true)} className="inline-flex items-center gap-2 px-4 py-2.5 border border-pink-300 bg-white rounded-xl text-sm font-medium text-pink-700 hover:bg-pink-50">
+                  <BedDouble className="w-4 h-4" /> Admettre en salle de naissance
+                </button>
+              )}
               <button onClick={() => setCpnOpen(true)} className="inline-flex items-center gap-2 px-4 py-2.5 bg-pink-600 hover:bg-pink-700 text-white rounded-xl text-sm font-semibold shadow-sm">
                 <Plus className="w-4 h-4" /> Nouvelle CPN
               </button>
@@ -243,6 +256,9 @@ export default function GrossessePage() {
         )}
       </div>
 
+      {admissionOpen && (
+        <AdmissionModal patient={p} onSaved={(aid) => navigate(`/naissance/${aid}`)} onClose={() => setAdmissionOpen(false)} />
+      )}
       {editOpen && <GrossesseFormModal grossesse={g} onSaved={fetchGrossesse} onClose={() => setEditOpen(false)} />}
       {cpnOpen && enCours && canWrite && (
         <CpnFormModal grossesse={g} appointmentId={passage} onSaved={fetchGrossesse} onClose={fermerCpn} />

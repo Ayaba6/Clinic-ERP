@@ -13,6 +13,8 @@ import CaissePage from '../modules/caisse/pages/CaissePage'
 import BlocPage from '../modules/bloc/pages/BlocPage'
 import MaternitePage from '../modules/maternite/pages/MaternitePage'
 import GrossessePage from '../modules/maternite/pages/GrossessePage'
+import SalleNaissancePage from '../modules/naissance/pages/SalleNaissancePage'
+import AccouchementPage from '../modules/naissance/pages/AccouchementPage'
 import DashboardAdmin from '../modules/admin/pages/DashboardAdmin'
 import StaffManagementPage from '../modules/admin/pages/StaffManagementPage'
 import ParametresPage from '../modules/admin/pages/ParametresPage'
@@ -72,6 +74,24 @@ export const AppRoutes = () => {
             element={
               <ProtectedRoute allowedRoles={['admin', 'medecin', 'sage_femme', 'infirmier', 'chirurgien']}>
                 <GrossessePage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Salle de naissance */}
+          <Route
+            path="/naissance"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'medecin', 'sage_femme', 'infirmier', 'chirurgien']}>
+                <SalleNaissancePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/naissance/:id"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'medecin', 'sage_femme', 'infirmier', 'chirurgien']}>
+                <AccouchementPage />
               </ProtectedRoute>
             }
           />
