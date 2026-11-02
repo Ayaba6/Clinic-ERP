@@ -1,7 +1,8 @@
 -- =====================================================================
 -- Clinique Nematoullah — Tableau de bord administrateur enrichi
 -- À exécuter UNE FOIS dans Supabase : SQL Editor > New query > Run.
--- Nécessite securite.sql, pharmacie.sql et caisse.sql. Relançable.
+-- Nécessite securite.sql, pharmacie.sql, caisse.sql, grossesse.sql,
+-- naissance.sql et rendezvous.sql. Relançable.
 --
 -- Une seule fonction calcule tous les indicateurs côté base, pour une
 -- période de p_jours jours (au-delà de 92 jours : regroupement par mois).
@@ -125,6 +126,45 @@ begin
         where f.statut <> 'annulee' and f.created_at >= v_from
         group by lf.type_acte
       ) x
+    ),
+
+    -- Maternité : activité de la période et situation en ce moment
+    'maternite', json_build_object(
+      'accouchements', (select count(*) from public.accouchements
+                        where statut = 'accouchee' and accouchement_le >= v_from),
+      'accouchements_prec', (select count(*) from public.accouchements
+                             where statut = 'accouchee' and accouchement_le >= v_from_prec and accouchement_le < v_from),
+      'cesariennes', (select count(*) from public.accouchements
+                      where statut = 'accouchee' and mode = 'cesarienne' and accouchement_le >= v_from),
+      'naissances_vivantes', (select count(*) from public.nouveau_nes n join public.accouchements a on a.id = n.accouchement_id
+                              where n.vivant and a.accouchement_le >= v_from),
+      'filles', (select count(*) from public.nouveau_nes n join public.accouchements a on a.id = n.accouchement_id
+                 where n.vivant and n.sexe = 'F' and a.accouchement_le >= v_from),
+      'garcons', (select count(*) from public.nouveau_nes n join public.accouchements a on a.id = n.accouchement_id
+                  where n.vivant and n.sexe = 'M' and a.accouchement_le >= v_from),
+      'mort_nes', (select count(*) from public.nouveau_nes n join public.accouchements a on a.id = n.accouchement_id
+                   where not n.vivant and a.accouchement_le >= v_from),
+      'hemorragies', (select count(*) from public.accouchements
+                      where statut = 'accouchee' and pertes_sang_ml >= 500 and accouchement_le >= v_from),
+      'apgar_bas', (select count(*) from public.nouveau_nes n join public.accouchements a on a.id = n.accouchement_id
+                    where n.apgar_5 < 7 and a.accouchement_le >= v_from),
+      'petits_poids', (select count(*) from public.nouveau_nes n join public.accouchements a on a.id = n.accouchement_id
+                       where n.vivant and n.poids_g < 2500 and a.accouchement_le >= v_from),
+      'transferts', (select count(*) from public.accouchements
+                     where statut = 'transferee' and admission_le >= v_from),
+      'cpn', (select count(*) from public.cpn where date_cpn >= v_from),
+      'cpn_prec', (select count(*) from public.cpn where date_cpn >= v_from_prec and date_cpn < v_from),
+      'grossesses_suivies', (select count(*) from public.grossesses where statut = 'en_cours'),
+      'grossesses_a_risque', (select count(*) from public.grossesses where statut = 'en_cours' and grossesse_a_risque),
+      'en_travail', (select count(*) from public.accouchements where statut = 'travail'),
+      'rdv_aujourdhui', (select count(*) from public.rendez_vous
+                         where statut not in ('annule') and date_heure >= v_from_jour
+                           and date_heure < v_from_jour + interval '1 day'),
+      'par_mode', (
+        select coalesce(json_agg(json_build_object('mode', mode, 'nombre', n) order by n desc), '[]'::json)
+        from (select mode, count(*) as n from public.accouchements
+              where statut = 'accouchee' and accouchement_le >= v_from group by mode) x
+      )
     )
   );
 end;

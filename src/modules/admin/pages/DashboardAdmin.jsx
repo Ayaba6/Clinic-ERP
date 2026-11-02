@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAdminStats } from '../hooks/useAdminStats'
 import { labelMode } from '../../caisse/hooks/useCaisse'
+import { labelMode as labelModeAccouchement } from '../../naissance/hooks/useNaissance'
 import ColumnChart from '../../../components/charts/ColumnChart'
 import BarList from '../../../components/charts/BarList'
 import { formatMontant } from '../../../lib/format'
 import {
   Loader2, Stethoscope, UserPlus, Wallet, Users, PackageX, AlertTriangle,
-  TrendingUp, TrendingDown, Table2, BarChart3,
+  TrendingUp, TrendingDown, Table2, BarChart3, Baby, HeartPulse, BedDouble, CalendarDays, AlertCircle, Ambulance,
 } from 'lucide-react'
 
 const PERIODES = [
@@ -196,6 +197,9 @@ export default function DashboardAdmin() {
           </Link>
         )}
 
+        {/* Maternité */}
+        {data.maternite && <SectionMaternite m={data.maternite} />}
+
         {/* Répartitions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ChartCard title="Recettes par mode de paiement">
@@ -228,14 +232,94 @@ export default function DashboardAdmin() {
   )
 }
 
-function StatTile({ icon: Icon, label, value, delta, sub, to }) {
+function SectionMaternite({ m }) {
+  const taux = m.accouchements > 0 ? Math.round((m.cesariennes / m.accouchements) * 100) : null
+  // Événements à surveiller : icône + libellé, jamais la couleur seule
+  const evenements = [
+    { n: m.hemorragies, label: 'hémorragie(s) du post-partum', icon: AlertCircle, critique: true },
+    { n: m.apgar_bas, label: 'Apgar < 7 à 5 min', icon: AlertCircle, critique: true },
+    { n: m.mort_nes, label: 'mort-né(s)', icon: AlertCircle, critique: true },
+    { n: m.petits_poids, label: 'petit(s) poids < 2 500 g', icon: AlertTriangle },
+    { n: m.transferts, label: 'transfert(s) / évacuation(s)', icon: Ambulance },
+  ].filter(e => e.n > 0)
+
+  return (
+    <section className="space-y-4">
+      <h3 className="flex items-center gap-2 text-sm font-bold text-slate-500 uppercase tracking-wider">
+        <Baby className="w-4 h-4" /> Maternité
+      </h3>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatTile icon={Baby} label="Accouchements" value={m.accouchements}
+          delta={variation(Number(m.accouchements), Number(m.accouchements_prec))} to="/naissance" />
+        <StatTile icon={HeartPulse} label="Naissances vivantes" value={m.naissances_vivantes}
+          sub={`${m.filles} fille(s) • ${m.garcons} garçon(s)`} />
+        <StatTile icon={BedDouble} label="Taux de césarienne" value={taux ?? 0} suffixe=" %"
+          sub={`${m.cesariennes} césarienne(s) sur ${m.accouchements}`} />
+        <StatTile icon={CalendarDays} label="CPN réalisées" value={m.cpn}
+          delta={variation(Number(m.cpn), Number(m.cpn_prec))} to="/maternite" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+          <h4 className="text-sm font-semibold text-slate-700">En ce moment</h4>
+          <dl className="space-y-2 text-sm">
+            <Ligne label="En salle de naissance" value={m.en_travail} to="/naissance" />
+            <Ligne label="Grossesses suivies" value={m.grossesses_suivies} to="/maternite" />
+            <Ligne label="dont à risque" value={m.grossesses_a_risque} />
+            <Ligne label="Rendez-vous aujourd'hui" value={m.rdv_aujourdhui} to="/rendez-vous" />
+          </dl>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+          <h4 className="text-sm font-semibold text-slate-700">Événements à surveiller</h4>
+          {evenements.length === 0 ? (
+            <p className="text-sm text-slate-400">Aucun sur la période.</p>
+          ) : (
+            <ul className="space-y-2 text-sm">
+              {evenements.map(e => {
+                const Icon = e.icon
+                return (
+                  <li key={e.label} className="flex items-center gap-2 text-slate-700">
+                    <Icon className={`w-4 h-4 ${e.critique ? 'text-[#d03b3b]' : 'text-[#ec835a]'}`} />
+                    <b>{e.n}</b> {e.label}
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
+
+        <ChartCard title="Accouchements par mode">
+          <BarList
+            data={(m.par_mode || []).map(x => ({ key: x.mode, label: labelModeAccouchement(x.mode), value: Number(x.nombre) }))}
+            formatValue={(v) => v.toLocaleString('fr-FR')}
+          />
+        </ChartCard>
+      </div>
+    </section>
+  )
+}
+
+function Ligne({ label, value, to }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <dt className="text-slate-500">{label}</dt>
+      <dd className="font-semibold text-slate-800">
+        {to ? <Link to={to} className="hover:text-blue-700">{Number(value).toLocaleString('fr-FR')}</Link> : Number(value).toLocaleString('fr-FR')}
+      </dd>
+    </div>
+  )
+}
+
+function StatTile({ icon: Icon, label, value, delta, sub, to, suffixe = '' }) {
   const content = (
     <>
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium text-slate-500">{label}</p>
         <Icon className="w-4 h-4 text-slate-400" />
       </div>
-      <p className="text-3xl font-semibold text-slate-900 mt-2">{Number(value).toLocaleString('fr-FR')}</p>
+      <p className="text-3xl font-semibold text-slate-900 mt-2">{Number(value).toLocaleString('fr-FR')}{suffixe}</p>
       {delta && (
         <p className={`text-xs font-medium mt-1 ${delta.hausse ? 'text-[#006300]' : 'text-[#d03b3b]'}`}>{delta.texte}</p>
       )}
