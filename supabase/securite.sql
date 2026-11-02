@@ -132,7 +132,7 @@ create policy "appointments_select" on public.appointments
 drop policy if exists "appointments_insert" on public.appointments;
 create policy "appointments_insert" on public.appointments
   for insert to authenticated
-  with check (public.mon_role() in ('admin', 'reception'));
+  with check (public.mon_role() in ('admin', 'reception', 'medecin', 'sage_femme'));
 
 drop policy if exists "appointments_update" on public.appointments;
 create policy "appointments_update" on public.appointments

@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../context/AuthContext'
 import { useQueue } from '../hooks/useQueue'
 import StatutBadge from '../../../components/ui/StatutBadge'
+import NouvelleConsultationModal from '../components/NouvelleConsultationModal'
 import { getAge, formatAttente, formatDateTime, formatPersonne } from '../../../lib/format'
-import { Loader2, Clock, AlertTriangle, Stethoscope, ArrowRight, CheckCircle2, Users } from 'lucide-react'
+import { Loader2, Clock, AlertTriangle, Stethoscope, ArrowRight, CheckCircle2, Users, Plus } from 'lucide-react'
 
 export default function QueuePage() {
   const { profile } = useAuth()
@@ -12,6 +13,7 @@ export default function QueuePage() {
   const { queue, doneToday, loading, error, takeCharge } = useQueue(profile)
   const [busyId, setBusyId] = useState(null)
   const [actionError, setActionError] = useState(null)
+  const [nouvelleOpen, setNouvelleOpen] = useState(false)
 
   const isAdmin = profile?.role === 'admin'
   const waiting = queue.filter(a => a.statut === 'en_attente')
@@ -48,7 +50,7 @@ export default function QueuePage() {
             {isAdmin ? 'Tous les patients en attente dans la clinique.' : 'Vos patients et ceux envoyés au premier médecin disponible.'}
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full text-xs font-semibold">
             <Users className="w-4 h-4" />
             <span>{waiting.length} en attente</span>
@@ -57,6 +59,13 @@ export default function QueuePage() {
             <CheckCircle2 className="w-4 h-4" />
             <span>{doneToday.length} vu(s) aujourd'hui</span>
           </div>
+          <button
+            onClick={() => setNouvelleOpen(true)}
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nouvelle consultation</span>
+          </button>
         </div>
       </div>
 
@@ -133,6 +142,8 @@ export default function QueuePage() {
           </div>
         </section>
       )}
+
+      {nouvelleOpen && <NouvelleConsultationModal profile={profile} onClose={() => setNouvelleOpen(false)} />}
     </div>
   )
 }

@@ -4,6 +4,9 @@
 -- Nécessite supabase/securite.sql (fonction mon_role). Relançable.
 -- =====================================================================
 
+-- NB : la version à jour de terminer_consultation (avec le type de
+-- consultation) est dans supabase/prestations.sql. Après avoir relancé
+-- ce fichier, relancez aussi prestations.sql.
 -- ---------------------------------------------------------------------
 -- 1. Terminer une consultation en une seule transaction :
 --    fiche de consultation + ordonnance + passage marqué « terminé ».

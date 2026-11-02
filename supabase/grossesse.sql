@@ -62,6 +62,9 @@ create policy "interventions_bloc_insert_demande" on public.interventions_bloc
   for insert to authenticated
   with check (public.mon_role() in ('medecin', 'sage_femme') and statut = 'demande');
 
+-- NB : la version à jour de terminer_consultation (avec le type de
+-- consultation) est dans supabase/prestations.sql. Après avoir relancé
+-- ce fichier, relancez aussi prestations.sql.
 -- La sage-femme peut aussi terminer une consultation (même fonction qu'avant,
 -- seule la liste des rôles autorisés change)
 create or replace function public.terminer_consultation(

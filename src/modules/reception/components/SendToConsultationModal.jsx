@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ShieldAlert, X, Loader2, Send } from 'lucide-react'
 import { useDoctors } from '../hooks/usePatientDossier'
 import { titreSoignant } from '../../../lib/roles'
+import { useTypesConsultation } from '../../consultation/hooks/useTypesConsultation'
 
 const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white'
 
@@ -9,6 +10,8 @@ export default function SendToConsultationModal({ patient, onSubmit, onClose }) 
   const doctors = useDoctors()
   const [doctorId, setDoctorId] = useState('')
   const [motif, setMotif] = useState('')
+  const types = useTypesConsultation()
+  const [tarifId, setTarifId] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [formError, setFormError] = useState(null)
 
@@ -17,7 +20,7 @@ export default function SendToConsultationModal({ patient, onSubmit, onClose }) 
     setSubmitting(true)
     setFormError(null)
 
-    const result = await onSubmit({ doctorId, motif })
+    const result = await onSubmit({ doctorId, motif, tarifId })
     setSubmitting(false)
 
     if (result.success) {
@@ -60,6 +63,14 @@ export default function SendToConsultationModal({ patient, onSubmit, onClose }) 
             {doctors.length === 0 && (
               <p className="text-xs text-amber-600 mt-1">Aucun compte avec le rôle « Médecin » ou « Sage-femme » pour l'instant.</p>
             )}
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 uppercase mb-1">Type de consultation</label>
+            <select value={tarifId} onChange={(e) => setTarifId(e.target.value)} className={inputClass}>
+              <option value="">Choisi par le praticien</option>
+              {types.map(t => <option key={t.id} value={t.id}>{t.libelle}</option>)}
+            </select>
           </div>
 
           <div>

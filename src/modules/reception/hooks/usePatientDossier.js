@@ -93,10 +93,10 @@ export function usePatientDossier(patientId, role) {
   }
 
   // Envoie le patient dans la file d'attente d'un médecin
-  const sendToConsultation = async ({ doctorId, motif }) => {
+  const sendToConsultation = async ({ doctorId, motif, tarifId }) => {
     const { data, error } = await supabase
       .from('appointments')
-      .insert([{ patient_id: patientId, doctor_id: doctorId || null, motif, statut: 'en_attente' }])
+      .insert([{ patient_id: patientId, doctor_id: doctorId || null, tarif_id: tarifId || null, motif, statut: 'en_attente' }])
       .select('*, doctor:profiles(nom, prenom)')
       .single()
 

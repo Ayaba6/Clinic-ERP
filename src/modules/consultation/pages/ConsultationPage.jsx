@@ -3,10 +3,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../../context/AuthContext'
 import { useConsultation } from '../hooks/useConsultation'
 import StatutBadge from '../../../components/ui/StatutBadge'
-import { getAge, formatDateTime, formatPersonne } from '../../../lib/format'
+import { getAge, formatDateTime, formatMontant, formatPersonne } from '../../../lib/format'
 import EnTeteDocument, { PiedDocument } from '../../../components/ui/EnTeteDocument'
 import { titreSoignant } from '../../../lib/roles'
 import { useGrossesseEnCours, joursDeGrossesse, formatSA } from '../../maternite/hooks/useMaternite'
+import { useTypesConsultation, typeParDefaut } from '../hooks/useTypesConsultation'
 import {
   ArrowLeft, Loader2, AlertTriangle, FolderOpen, Undo2, Pill, Plus, Trash2,
   CheckCircle2, Printer, ShieldAlert, History,
@@ -24,7 +25,11 @@ export default function ConsultationPage() {
   const { appointment, previous, medicaments, loading, error, terminer, remettreEnAttente } = useConsultation(appointmentId)
   const grossesse = useGrossesseEnCours(appointment?.patient_id, appointment?.patient?.genre === 'F')
 
-  const [values, setValues] = useState({ poids: '', temperature: '', tension: '', symptomes: '', diagnostic: '' })
+  const [values, setValues] = useState({ poids: '', temperature: '', tension: '', symptomes: '', diagnostic: '', tarif_id: '' })
+  const typesConsultation = useTypesConsultation()
+  // Type choisi, sinon celui du passage (réception), sinon celui du rôle
+  const typeConsultation = values.tarif_id || appointment?.tarif_id || typeParDefaut(typesConsultation, profile?.role)
+  const tarifConsultation = typesConsultation.find(t => t.id === typeConsultation)
   const [lines, setLines] = useState([])
   const [draft, setDraft] = useState(EMPTY_LINE)
   const [submitting, setSubmitting] = useState(false)
@@ -51,7 +56,7 @@ export default function ConsultationPage() {
     e.preventDefault()
     setSubmitting(true)
     setFormError(null)
-    const result = await terminer(values, lines)
+    const result = await terminer({ ...values, tarif_id: typeConsultation }, lines)
     setSubmitting(false)
     if (result.success) {
       setSaved(true)
@@ -230,6 +235,20 @@ export default function ConsultationPage() {
                   <label className={labelClass}>Tension</label>
                   <input type="text" name="tension" value={values.tension} onChange={handleChange} className={inputClass} placeholder="Ex: 12/8" />
                 </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Type de consultation</h3>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <select name="tarif_id" value={typeConsultation} onChange={handleChange} className={`${inputClass} sm:max-w-sm`}>
+                  {typesConsultation.map(t => <option key={t.id} value={t.id}>{t.libelle}</option>)}
+                </select>
+                {tarifConsultation && (
+                  <span className={`text-sm ${Number(tarifConsultation.prix) > 0 ? 'text-slate-600' : 'text-amber-700 font-medium'}`}>
+                    {Number(tarifConsultation.prix) > 0 ? `Facturé ${formatMontant(tarifConsultation.prix)}` : 'Prix à compléter dans Caisse > Tarifs'}
+                  </span>
+                )}
               </div>
             </div>
 

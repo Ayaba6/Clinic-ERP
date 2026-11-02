@@ -64,6 +64,8 @@ export function useConsultation(appointmentId) {
         quantite: Number(p.quantite),
         posologie: p.posologie,
       })),
+      // Type de consultation facturé (toujours transmis, même vide)
+      p_tarif_id: values.tarif_id || null,
     })
 
     if (error) return { success: false, error: error.message }
