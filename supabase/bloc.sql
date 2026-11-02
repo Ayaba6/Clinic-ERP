@@ -67,7 +67,7 @@ create index if not exists interventions_bloc_date_idx on public.interventions_b
 drop policy if exists "interventions_bloc_insert_demande" on public.interventions_bloc;
 create policy "interventions_bloc_insert_demande" on public.interventions_bloc
   for insert to authenticated
-  with check (public.mon_role() = 'medecin' and statut = 'demande');
+  with check (public.mon_role() in ('medecin', 'sage_femme') and statut = 'demande');
 
 -- ---------------------------------------------------------------------
 -- 4. Contrôles à chaque écriture

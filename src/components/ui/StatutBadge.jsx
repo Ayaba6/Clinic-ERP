@@ -11,6 +11,8 @@ const STATUTS = {
   payee: { label: 'Payée', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
   annulee: { label: 'Annulée', color: 'bg-slate-100 text-slate-500 border-slate-200' },
   prescrit: { label: 'Prescrit', color: 'bg-amber-50 text-amber-700 border-amber-200' },
+  accouchee: { label: 'Accouchée', color: 'bg-pink-50 text-pink-700 border-pink-200' },
+  interrompue: { label: 'Interrompue', color: 'bg-slate-100 text-slate-600 border-slate-200' },
   delivre: { label: 'Délivré', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
 }
 

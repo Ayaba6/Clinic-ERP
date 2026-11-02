@@ -52,7 +52,7 @@ export default function CreateStaffModal({ onSubmit, onClose }) {
     }
   }
 
-  const showSpecialite = ['medecin', 'chirurgien', 'infirmier'].includes(values.role)
+  const showSpecialite = ['medecin', 'sage_femme', 'chirurgien', 'infirmier'].includes(values.role)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm px-4">

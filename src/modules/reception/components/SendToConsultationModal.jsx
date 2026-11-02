@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ShieldAlert, X, Loader2, Send } from 'lucide-react'
 import { useDoctors } from '../hooks/usePatientDossier'
+import { titreSoignant } from '../../../lib/roles'
 
 const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white'
 
@@ -47,17 +48,17 @@ export default function SendToConsultationModal({ patient, onSubmit, onClose }) 
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-600 uppercase mb-1">Médecin</label>
+            <label className="block text-xs font-semibold text-slate-600 uppercase mb-1">Médecin ou sage-femme</label>
             <select value={doctorId} onChange={(e) => setDoctorId(e.target.value)} className={inputClass}>
               <option value="">Premier médecin disponible</option>
               {doctors.map(d => (
                 <option key={d.id} value={d.id}>
-                  Dr {d.nom} {d.prenom}{d.specialite ? ` — ${d.specialite}` : ''}
+                  {titreSoignant(d.role)}{d.nom} {d.prenom}{d.specialite ? ` — ${d.specialite}` : ''}
                 </option>
               ))}
             </select>
             {doctors.length === 0 && (
-              <p className="text-xs text-amber-600 mt-1">Aucun compte avec le rôle « Médecin » pour l'instant.</p>
+              <p className="text-xs text-amber-600 mt-1">Aucun compte avec le rôle « Médecin » ou « Sage-femme » pour l'instant.</p>
             )}
           </div>
 

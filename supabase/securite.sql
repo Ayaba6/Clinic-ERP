@@ -9,7 +9,7 @@
 -- ---------------------------------------------------------------------
 alter table public.profiles drop constraint if exists profiles_role_check;
 alter table public.profiles add constraint profiles_role_check
-  check (role in ('admin', 'reception', 'medecin', 'infirmier', 'pharmacien', 'chirurgien', 'caisse'));
+  check (role in ('admin', 'reception', 'medecin', 'sage_femme', 'infirmier', 'pharmacien', 'chirurgien', 'caisse'));
 
 -- ---------------------------------------------------------------------
 -- 1. Fonction utilitaire : rôle de l'utilisateur connecté
@@ -106,7 +106,7 @@ alter table public.patients enable row level security;
 drop policy if exists "patients_select" on public.patients;
 create policy "patients_select" on public.patients
   for select to authenticated
-  using (public.mon_role() in ('admin', 'reception', 'medecin', 'infirmier', 'chirurgien', 'pharmacien', 'caisse'));
+  using (public.mon_role() in ('admin', 'reception', 'medecin', 'sage_femme', 'infirmier', 'chirurgien', 'pharmacien', 'caisse'));
 
 drop policy if exists "patients_insert" on public.patients;
 create policy "patients_insert" on public.patients
@@ -116,8 +116,8 @@ create policy "patients_insert" on public.patients
 drop policy if exists "patients_update" on public.patients;
 create policy "patients_update" on public.patients
   for update to authenticated
-  using (public.mon_role() in ('admin', 'reception', 'medecin'))
-  with check (public.mon_role() in ('admin', 'reception', 'medecin'));
+  using (public.mon_role() in ('admin', 'reception', 'medecin', 'sage_femme'))
+  with check (public.mon_role() in ('admin', 'reception', 'medecin', 'sage_femme'));
 
 -- ---------------------------------------------------------------------
 -- 5. RENDEZ-VOUS / FILE D'ATTENTE (appointments)
@@ -127,7 +127,7 @@ alter table public.appointments enable row level security;
 drop policy if exists "appointments_select" on public.appointments;
 create policy "appointments_select" on public.appointments
   for select to authenticated
-  using (public.mon_role() in ('admin', 'reception', 'medecin', 'infirmier', 'chirurgien', 'caisse'));
+  using (public.mon_role() in ('admin', 'reception', 'medecin', 'sage_femme', 'infirmier', 'chirurgien', 'caisse'));
 
 drop policy if exists "appointments_insert" on public.appointments;
 create policy "appointments_insert" on public.appointments
@@ -137,8 +137,8 @@ create policy "appointments_insert" on public.appointments
 drop policy if exists "appointments_update" on public.appointments;
 create policy "appointments_update" on public.appointments
   for update to authenticated
-  using (public.mon_role() in ('admin', 'reception', 'medecin'))
-  with check (public.mon_role() in ('admin', 'reception', 'medecin'));
+  using (public.mon_role() in ('admin', 'reception', 'medecin', 'sage_femme'))
+  with check (public.mon_role() in ('admin', 'reception', 'medecin', 'sage_femme'));
 
 -- ---------------------------------------------------------------------
 -- 6. CONSULTATIONS : médecins et admin ; lecture pour chirurgiens et infirmiers
@@ -148,8 +148,8 @@ alter table public.consultations enable row level security;
 drop policy if exists "consultations_all" on public.consultations;
 create policy "consultations_all" on public.consultations
   for all to authenticated
-  using (public.mon_role() in ('admin', 'medecin'))
-  with check (public.mon_role() in ('admin', 'medecin'));
+  using (public.mon_role() in ('admin', 'medecin', 'sage_femme'))
+  with check (public.mon_role() in ('admin', 'medecin', 'sage_femme'));
 
 drop policy if exists "consultations_select_chirurgien" on public.consultations;
 drop policy if exists "consultations_select_lecture" on public.consultations;
@@ -165,8 +165,8 @@ alter table public.prescriptions enable row level security;
 drop policy if exists "prescriptions_all" on public.prescriptions;
 create policy "prescriptions_all" on public.prescriptions
   for all to authenticated
-  using (public.mon_role() in ('admin', 'medecin'))
-  with check (public.mon_role() in ('admin', 'medecin'));
+  using (public.mon_role() in ('admin', 'medecin', 'sage_femme'))
+  with check (public.mon_role() in ('admin', 'medecin', 'sage_femme'));
 
 drop policy if exists "prescriptions_select_pharmacien" on public.prescriptions;
 create policy "prescriptions_select_pharmacien" on public.prescriptions
@@ -193,7 +193,7 @@ create policy "interventions_bloc_all" on public.interventions_bloc
 drop policy if exists "interventions_bloc_select_medecin" on public.interventions_bloc;
 create policy "interventions_bloc_select_medecin" on public.interventions_bloc
   for select to authenticated
-  using (public.mon_role() in ('medecin', 'infirmier', 'caisse'));
+  using (public.mon_role() in ('medecin', 'sage_femme', 'infirmier', 'caisse'));
 
 -- ---------------------------------------------------------------------
 -- 9. LIGNES DE FACTURE : caisse et admin
@@ -220,7 +220,7 @@ create policy "medicaments_all" on public.medicaments
 drop policy if exists "medicaments_select_medecin" on public.medicaments;
 create policy "medicaments_select_medecin" on public.medicaments
   for select to authenticated
-  using (public.mon_role() in ('medecin', 'chirurgien', 'infirmier'));
+  using (public.mon_role() in ('medecin', 'sage_femme', 'chirurgien', 'infirmier'));
 
 -- ---------------------------------------------------------------------
 -- 11. FACTURES : caisse et admin

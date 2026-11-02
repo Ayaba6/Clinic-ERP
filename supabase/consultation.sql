@@ -29,7 +29,7 @@ declare
   v_statut text;
   v_consultation_id uuid;
 begin
-  if coalesce(public.mon_role(), '') not in ('admin', 'medecin') then
+  if coalesce(public.mon_role(), '') not in ('admin', 'medecin', 'sage_femme') then
     raise exception 'Seuls les médecins peuvent enregistrer une consultation';
   end if;
 

@@ -11,7 +11,8 @@ import {
   UserCog,
   LogOut,
   ChevronDown,
-  Settings
+  Settings,
+  Baby
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -31,7 +32,8 @@ export default function Layout() {
 
   const menuItems = [
     { label: 'Réception & Patients', path: '/reception', icon: Users, roles: ['admin', 'reception', 'infirmier'] },
-    { label: 'Consultations', path: '/consultation', icon: Stethoscope, roles: ['admin', 'medecin'] },
+    { label: 'Maternité', path: '/maternite', icon: Baby, roles: ['admin', 'medecin', 'sage_femme', 'infirmier'] },
+    { label: 'Consultations', path: '/consultation', icon: Stethoscope, roles: ['admin', 'medecin', 'sage_femme'] },
     { label: 'Pharmacie', path: '/pharmacie', icon: Pill, roles: ['admin', 'pharmacien'] },
     { label: 'Bloc Opératoire', path: '/bloc', icon: Activity, roles: ['admin', 'chirurgien', 'infirmier'] },
     { label: 'Caisse & Facturation', path: '/caisse', icon: CreditCard, roles: ['admin', 'caisse'] },

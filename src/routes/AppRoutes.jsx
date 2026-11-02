@@ -11,6 +11,8 @@ import ConsultationPage from '../modules/consultation/pages/ConsultationPage'
 import PharmaciePage from '../modules/pharmacie/pages/PharmaciePage'
 import CaissePage from '../modules/caisse/pages/CaissePage'
 import BlocPage from '../modules/bloc/pages/BlocPage'
+import MaternitePage from '../modules/maternite/pages/MaternitePage'
+import GrossessePage from '../modules/maternite/pages/GrossessePage'
 import DashboardAdmin from '../modules/admin/pages/DashboardAdmin'
 import StaffManagementPage from '../modules/admin/pages/StaffManagementPage'
 import ParametresPage from '../modules/admin/pages/ParametresPage'
@@ -50,8 +52,26 @@ export const AppRoutes = () => {
           <Route
             path="/patients/:id"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'reception', 'medecin', 'infirmier', 'chirurgien', 'pharmacien', 'caisse']}>
+              <ProtectedRoute allowedRoles={['admin', 'reception', 'medecin', 'sage_femme', 'infirmier', 'chirurgien', 'pharmacien', 'caisse']}>
                 <PatientDossierPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Module Maternité */}
+          <Route
+            path="/maternite"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'medecin', 'sage_femme', 'infirmier', 'chirurgien']}>
+                <MaternitePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/maternite/grossesses/:id"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'medecin', 'sage_femme', 'infirmier', 'chirurgien']}>
+                <GrossessePage />
               </ProtectedRoute>
             }
           />
@@ -60,7 +80,7 @@ export const AppRoutes = () => {
           <Route
             path="/consultation"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'medecin']}>
+              <ProtectedRoute allowedRoles={['admin', 'medecin', 'sage_femme']}>
                 <QueuePage />
               </ProtectedRoute>
             }
@@ -68,7 +88,7 @@ export const AppRoutes = () => {
           <Route
             path="/consultation/:appointmentId"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'medecin']}>
+              <ProtectedRoute allowedRoles={['admin', 'medecin', 'sage_femme']}>
                 <ConsultationPage />
               </ProtectedRoute>
             }

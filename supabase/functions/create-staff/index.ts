@@ -8,7 +8,7 @@
 // =====================================================================
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
-const ROLES = ['admin', 'reception', 'medecin', 'infirmier', 'pharmacien', 'chirurgien', 'caisse']
+const ROLES = ['admin', 'reception', 'medecin', 'sage_femme', 'infirmier', 'pharmacien', 'chirurgien', 'caisse']
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

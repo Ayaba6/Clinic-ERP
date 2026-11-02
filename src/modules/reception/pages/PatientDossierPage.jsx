@@ -5,11 +5,13 @@ import { usePatientDossier, SECTIONS_BY_ROLE } from '../hooks/usePatientDossier'
 import PatientFormModal from '../components/PatientFormModal'
 import SendToConsultationModal from '../components/SendToConsultationModal'
 import InterventionFormModal from '../../bloc/components/InterventionFormModal'
+import GrossesseFormModal from '../../maternite/components/GrossesseFormModal'
+import { useGrossesseEnCours, joursDeGrossesse, formatSA } from '../../maternite/hooks/useMaternite'
 import StatutBadge from '../../../components/ui/StatutBadge'
 import { getAge, formatDate, formatDateTime, formatMontant, formatPersonne } from '../../../lib/format'
 import {
   ArrowLeft, Loader2, Pencil, Send, Phone, Heart, Calendar, AlertTriangle,
-  ClipboardList, Stethoscope, Activity, CreditCard, Pill, X,
+  ClipboardList, Stethoscope, Activity, CreditCard, Pill, X, Baby,
 } from 'lucide-react'
 
 const TABS = {
@@ -29,6 +31,9 @@ export default function PatientDossierPage() {
   const { profile } = useAuth()
   const role = profile?.role
   const { patient, history, loading, error, fetchDossier, updatePatient, sendToConsultation, cancelAppointment } = usePatientDossier(id, role)
+  const voitMaternite = ['admin', 'medecin', 'sage_femme', 'infirmier', 'chirurgien'].includes(role)
+  const grossesse = useGrossesseEnCours(patient?.id, voitMaternite && patient?.genre === 'F')
+  const [grossesseOpen, setGrossesseOpen] = useState(false)
 
   const sections = SECTIONS_BY_ROLE[role] || []
   const [activeTab, setActiveTab] = useState(sections[0])
@@ -37,10 +42,10 @@ export default function PatientDossierPage() {
   const [blocOpen, setBlocOpen] = useState(false)
   const [actionError, setActionError] = useState(null)
 
-  const canEdit = ['admin', 'reception', 'medecin'].includes(role)
+  const canEdit = ['admin', 'reception', 'medecin', 'sage_femme'].includes(role)
   const canSend = ['admin', 'reception'].includes(role)
   // Le médecin demande une intervention ; le chirurgien et l'admin la programment directement
-  const blocMode = role === 'medecin' ? 'demande' : ['admin', 'chirurgien'].includes(role) ? 'programmer' : null
+  const blocMode = ['medecin', 'sage_femme'].includes(role) ? 'demande' : ['admin', 'chirurgien'].includes(role) ? 'programmer' : null
   const backPath = ['admin', 'reception', 'infirmier'].includes(role) ? '/reception' : -1
 
   if (loading) {
@@ -106,6 +111,24 @@ export default function PatientDossierPage() {
             >
               <Pencil className="w-4 h-4" />
               <span>Modifier</span>
+            </button>
+          )}
+          {grossesse && (
+            <Link
+              to={`/maternite/grossesses/${grossesse.id}`}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-pink-50 border border-pink-200 rounded-xl text-sm font-medium text-pink-700 hover:bg-pink-100 transition"
+            >
+              <Baby className="w-4 h-4" />
+              <span>Grossesse • {formatSA(joursDeGrossesse(grossesse))}</span>
+            </Link>
+          )}
+          {!grossesse && patient.genre === 'F' && ['admin', 'medecin', 'sage_femme'].includes(role) && (
+            <button
+              onClick={() => setGrossesseOpen(true)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-slate-300 bg-white rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
+            >
+              <Baby className="w-4 h-4" />
+              <span>Suivi de grossesse</span>
             </button>
           )}
           {blocMode && (
@@ -234,6 +257,14 @@ export default function PatientDossierPage() {
           submitLabel="Enregistrer les modifications"
           onSubmit={updatePatient}
           onClose={() => setEditOpen(false)}
+        />
+      )}
+
+      {grossesseOpen && (
+        <GrossesseFormModal
+          patient={patient}
+          onSaved={(gid) => navigate(`/maternite/grossesses/${gid}`)}
+          onClose={() => setGrossesseOpen(false)}
         />
       )}
 

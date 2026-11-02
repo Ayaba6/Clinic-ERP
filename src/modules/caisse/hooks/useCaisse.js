@@ -140,7 +140,7 @@ export async function rechercherPatients(term) {
   if (t.length < 2) return []
   const { data } = await supabase
     .from('patients')
-    .select('id, code_patient, nom, prenom, telephone')
+    .select('id, code_patient, nom, prenom, telephone, genre')
     .or(`nom.ilike.%${t}%,prenom.ilike.%${t}%,code_patient.ilike.%${t}%,telephone.ilike.%${t}%`)
     .order('nom')
     .limit(10)

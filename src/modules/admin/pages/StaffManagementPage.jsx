@@ -3,12 +3,13 @@ import { useAuth } from '../../../context/AuthContext'
 import { useStaff } from '../hooks/useStaff'
 import CreateStaffModal from '../components/CreateStaffModal'
 import { ROLES, getRole } from '../../../lib/roles'
-import { Users, Shield, Stethoscope, Pill, Activity, CreditCard, UserCog, Loader2, Search, UserPlus, HeartPulse } from 'lucide-react'
+import { Users, Shield, Stethoscope, Pill, Activity, CreditCard, UserCog, Loader2, Search, UserPlus, HeartPulse, Baby } from 'lucide-react'
 
 const ROLE_ICONS = {
   admin: Shield,
   reception: Users,
   medecin: Stethoscope,
+  sage_femme: Baby,
   infirmier: HeartPulse,
   pharmacien: Pill,
   chirurgien: Activity,

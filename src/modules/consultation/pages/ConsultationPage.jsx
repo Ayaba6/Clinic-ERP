@@ -5,6 +5,8 @@ import { useConsultation } from '../hooks/useConsultation'
 import StatutBadge from '../../../components/ui/StatutBadge'
 import { getAge, formatDateTime, formatPersonne } from '../../../lib/format'
 import EnTeteDocument, { PiedDocument } from '../../../components/ui/EnTeteDocument'
+import { titreSoignant } from '../../../lib/roles'
+import { useGrossesseEnCours, joursDeGrossesse, formatSA } from '../../maternite/hooks/useMaternite'
 import {
   ArrowLeft, Loader2, AlertTriangle, FolderOpen, Undo2, Pill, Plus, Trash2,
   CheckCircle2, Printer, ShieldAlert, History,
@@ -20,6 +22,7 @@ export default function ConsultationPage() {
   const navigate = useNavigate()
   const { profile } = useAuth()
   const { appointment, previous, medicaments, loading, error, terminer, remettreEnAttente } = useConsultation(appointmentId)
+  const grossesse = useGrossesseEnCours(appointment?.patient_id, appointment?.patient?.genre === 'F')
 
   const [values, setValues] = useState({ poids: '', temperature: '', tension: '', symptomes: '', diagnostic: '' })
   const [lines, setLines] = useState([])
@@ -169,6 +172,22 @@ export default function ConsultationPage() {
           )}
         </div>
       </div>
+
+      {/* Grossesse en cours : la visite peut être enregistrée comme CPN */}
+      {grossesse && !['termine', 'annule'].includes(appointment.statut) && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-pink-50 border border-pink-200 rounded-2xl">
+          <div className="text-sm text-pink-900">
+            <span className="font-bold">Grossesse en cours — {formatSA(joursDeGrossesse(grossesse))}.</span>{' '}
+            S'il s'agit d'une consultation prénatale, enregistrez-la comme CPN.
+          </div>
+          <Link
+            to={`/maternite/grossesses/${grossesse.id}?passage=${appointment.id}`}
+            className="inline-flex items-center justify-center px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-xl text-sm font-semibold whitespace-nowrap"
+          >
+            Faire la CPN
+          </Link>
+        </div>
+      )}
 
       {/* Allergies : toujours visibles avant de prescrire */}
       {patient.allergies && (
@@ -357,7 +376,7 @@ function Ordonnance({ patient, doctor, lines, medById }) {
   return (
     <div className="bg-white p-10 rounded-2xl border border-slate-200 shadow-sm print:shadow-none print:border-0 print:p-0 space-y-8">
       <EnTeteDocument>
-        <div className="text-sm font-semibold text-slate-900">{formatPersonne(doctor, 'Dr ')}</div>
+        <div className="text-sm font-semibold text-slate-900">{formatPersonne(doctor, titreSoignant(doctor?.role))}</div>
         {doctor?.specialite && <div>{doctor.specialite}</div>}
       </EnTeteDocument>
 

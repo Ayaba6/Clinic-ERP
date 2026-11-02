@@ -8,6 +8,7 @@ export const SECTIONS_BY_ROLE = {
   admin: ['appointments', 'consultations', 'interventions', 'factures'],
   reception: ['appointments'],
   medecin: ['appointments', 'consultations', 'interventions'],
+  sage_femme: ['appointments', 'consultations', 'interventions'],
   infirmier: ['appointments', 'consultations', 'interventions'],
   chirurgien: ['appointments', 'consultations', 'interventions'],
   pharmacien: [],
@@ -128,8 +129,8 @@ export function useDoctors() {
   useEffect(() => {
     supabase
       .from('profiles')
-      .select('id, nom, prenom, specialite')
-      .eq('role', 'medecin')
+      .select('id, nom, prenom, specialite, role')
+      .in('role', ['medecin', 'sage_femme'])
       .order('nom')
       .then(({ data }) => setDoctors(data || []))
   }, [])
