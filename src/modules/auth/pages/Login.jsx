@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../../../context/AuthContext'
 import { getHomePath } from '../../../lib/roles'
+import { useClinique } from '../../../lib/clinique'
 import { Lock, Mail, AlertCircle, Loader2, Stethoscope } from 'lucide-react'
 
 export default function LoginPage() {
@@ -10,6 +11,7 @@ export default function LoginPage() {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
   const { user, profile, login, logout } = useAuth()
+  const { clinique } = useClinique()
 
   // Déjà connecté : redirection vers l'espace correspondant au rôle
   if (user && profile) {
@@ -53,8 +55,8 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-2xl shadow-lg shadow-blue-500/30 mb-4">
             <Stethoscope className="w-7 h-7" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Clinic ERP</h1>
-          <p className="text-sm text-slate-600 mt-1">Plateforme de gestion clinique intégrée</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">{clinique.nom}</h1>
+          <p className="text-sm text-slate-600 mt-1">{clinique.sous_titre}</p>
         </div>
 
         {/* Compte sans profil dans la table profiles */}

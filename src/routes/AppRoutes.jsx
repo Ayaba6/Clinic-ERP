@@ -13,6 +13,7 @@ import CaissePage from '../modules/caisse/pages/CaissePage'
 import BlocPage from '../modules/bloc/pages/BlocPage'
 import DashboardAdmin from '../modules/admin/pages/DashboardAdmin'
 import StaffManagementPage from '../modules/admin/pages/StaffManagementPage'
+import ParametresPage from '../modules/admin/pages/ParametresPage'
 
 // Adresse inconnue : espace du rôle si connecté, sinon page de connexion
 const RedirectHome = () => {
@@ -117,6 +118,14 @@ export const AppRoutes = () => {
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <StaffManagementPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/parametres"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <ParametresPage />
               </ProtectedRoute>
             }
           />

@@ -1,5 +1,5 @@
 -- =====================================================================
--- Clinic ERP — Module Bloc opératoire
+-- Clinique Nematoullah — Module Bloc opératoire
 -- À exécuter UNE FOIS dans Supabase : SQL Editor > New query > Run.
 -- Nécessite securite.sql et caisse.sql. Relançable.
 --

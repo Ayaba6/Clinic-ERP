@@ -1,5 +1,6 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { useClinique } from '../../lib/clinique'
 import { 
   Users, 
   Stethoscope, 
@@ -9,12 +10,14 @@ import {
   LayoutDashboard, 
   UserCog,
   LogOut,
-  ChevronDown
+  ChevronDown,
+  Settings
 } from 'lucide-react'
 import { useState } from 'react'
 
 export default function Layout() {
   const { profile, logout } = useAuth()
+  const { clinique } = useClinique()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -37,6 +40,7 @@ export default function Layout() {
   const adminSubMenus = [
     { label: 'Tableau de bord', path: '/admin', icon: LayoutDashboard },
     { label: 'Personnel & Rôles (RBAC)', path: '/admin/staff', icon: UserCog },
+    { label: 'Paramètres de la clinique', path: '/admin/parametres', icon: Settings },
   ]
 
   const isAdmin = profile && profile.role === 'admin'
@@ -46,7 +50,7 @@ export default function Layout() {
       {/* Sidebar latérale */}
       <aside className="print:hidden w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl">
         <div className="p-6 border-b border-slate-800">
-          <h2 className="text-xl font-bold text-white tracking-wide">Clinic ERP</h2>
+          <h2 className="text-lg font-bold text-white leading-tight">{clinique.nom}</h2>
           <p className="text-xs text-slate-400 mt-1 capitalize">
             Rôle : <span className="text-blue-400 font-medium">{profile?.role}</span>
           </p>

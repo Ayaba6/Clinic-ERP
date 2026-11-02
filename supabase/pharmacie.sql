@@ -1,5 +1,5 @@
 -- =====================================================================
--- Clinic ERP — Module Pharmacie
+-- Clinique Nematoullah — Module Pharmacie
 -- À exécuter UNE FOIS dans Supabase : SQL Editor > New query > Run.
 -- Nécessite supabase/securite.sql (fonction mon_role). Relançable.
 -- =====================================================================

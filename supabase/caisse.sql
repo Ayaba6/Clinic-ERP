@@ -1,5 +1,5 @@
 -- =====================================================================
--- Clinic ERP — Module Caisse & Facturation
+-- Clinique Nematoullah — Module Caisse & Facturation
 -- À exécuter UNE FOIS dans Supabase : SQL Editor > New query > Run.
 -- Nécessite securite.sql, consultation.sql et pharmacie.sql. Relançable.
 -- =====================================================================

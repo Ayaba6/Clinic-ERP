@@ -1,18 +1,13 @@
 import { labelAnesthesie } from '../hooks/useBloc'
-import { aujourdhui, getAge, formatDateTime, formatPersonne } from '../../../lib/format'
+import { getAge, formatDateTime, formatPersonne } from '../../../lib/format'
+import EnTeteDocument, { PiedDocument } from '../../../components/ui/EnTeteDocument'
 
 // Compte rendu opératoire imprimable
 export default function CompteRendu({ intervention: i }) {
   const p = i.patient || {}
   return (
     <div className="max-w-2xl mx-auto text-slate-900 text-sm space-y-6">
-      <div className="flex justify-between items-start border-b border-slate-300 pb-4">
-        <div>
-          <h1 className="text-xl font-bold">Clinic ERP</h1>
-          <p className="text-xs text-slate-600">Bloc opératoire</p>
-        </div>
-        <div className="text-right text-xs text-slate-600">Imprimé le {aujourdhui()}</div>
-      </div>
+      <EnTeteDocument titre="Bloc opératoire" />
 
       <h2 className="text-lg font-bold tracking-wide text-center">COMPTE RENDU OPÉRATOIRE</h2>
 
@@ -46,6 +41,7 @@ export default function CompteRendu({ intervention: i }) {
       </div>
 
       <div className="pt-12 text-right text-xs text-slate-600">Signature du chirurgien</div>
+      <PiedDocument />
     </div>
   )
 }

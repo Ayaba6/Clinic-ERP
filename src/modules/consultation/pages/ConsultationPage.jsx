@@ -3,7 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../../context/AuthContext'
 import { useConsultation } from '../hooks/useConsultation'
 import StatutBadge from '../../../components/ui/StatutBadge'
-import { getAge, aujourdhui, formatDateTime, formatPersonne } from '../../../lib/format'
+import { getAge, formatDateTime, formatPersonne } from '../../../lib/format'
+import EnTeteDocument, { PiedDocument } from '../../../components/ui/EnTeteDocument'
 import {
   ArrowLeft, Loader2, AlertTriangle, FolderOpen, Undo2, Pill, Plus, Trash2,
   CheckCircle2, Printer, ShieldAlert, History,
@@ -355,16 +356,10 @@ export default function ConsultationPage() {
 function Ordonnance({ patient, doctor, lines, medById }) {
   return (
     <div className="bg-white p-10 rounded-2xl border border-slate-200 shadow-sm print:shadow-none print:border-0 print:p-0 space-y-8">
-      <div className="flex justify-between items-start border-b border-slate-200 pb-6">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900">Clinic ERP</h2>
-          <p className="text-sm text-slate-600">{formatPersonne(doctor, 'Dr ')}</p>
-          {doctor?.specialite && <p className="text-xs text-slate-500">{doctor.specialite}</p>}
-        </div>
-        <div className="text-right text-sm text-slate-600">
-          Le {aujourdhui()}
-        </div>
-      </div>
+      <EnTeteDocument>
+        <div className="text-sm font-semibold text-slate-900">{formatPersonne(doctor, 'Dr ')}</div>
+        {doctor?.specialite && <div>{doctor.specialite}</div>}
+      </EnTeteDocument>
 
       <div className="text-sm text-slate-700">
         <span className="font-semibold">Patient : </span>
@@ -388,6 +383,7 @@ function Ordonnance({ patient, doctor, lines, medById }) {
       </div>
 
       <div className="pt-16 text-right text-sm text-slate-500">Signature et cachet</div>
+      <PiedDocument />
     </div>
   )
 }

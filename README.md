@@ -1,4 +1,4 @@
-# Clinic ERP
+# Clinique Nematoullah — logiciel de gestion
 
 Application de gestion de clinique : réception et dossiers patients, consultations, pharmacie, bloc opératoire, caisse et administration, avec un accès par rôle.
 

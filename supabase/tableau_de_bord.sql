@@ -1,5 +1,5 @@
 -- =====================================================================
--- Clinic ERP — Tableau de bord administrateur enrichi
+-- Clinique Nematoullah — Tableau de bord administrateur enrichi
 -- À exécuter UNE FOIS dans Supabase : SQL Editor > New query > Run.
 -- Nécessite securite.sql, pharmacie.sql et caisse.sql. Relançable.
 --

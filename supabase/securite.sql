@@ -1,5 +1,5 @@
 -- =====================================================================
--- Clinic ERP — Sécurité (RLS), code patient et statistiques admin
+-- Clinique Nematoullah — Sécurité (RLS), code patient et statistiques admin
 -- À exécuter UNE FOIS dans Supabase : SQL Editor > New query > Run.
 -- Le script peut être relancé sans danger (idempotent).
 -- =====================================================================

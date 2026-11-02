@@ -1,21 +1,15 @@
 import { labelMode, totauxJournal } from '../hooks/useCaisse'
-import { aujourdhui, formatDate, formatDateTime, formatMontant, formatPersonne } from '../../../lib/format'
+import { formatDate, formatDateTime, formatMontant, formatPersonne } from '../../../lib/format'
+import EnTeteDocument, { PiedDocument } from '../../../components/ui/EnTeteDocument'
 
 // Reçu de paiement imprimable
 export function Recu({ facture: f }) {
   const reste = Number(f.montant_total) - Number(f.montant_paye)
   return (
     <div className="max-w-xl mx-auto text-slate-900 text-sm space-y-6">
-      <div className="flex justify-between items-start border-b border-slate-300 pb-4">
-        <div>
-          <h1 className="text-xl font-bold">Clinic ERP</h1>
-          <p className="text-xs text-slate-600">Reçu de paiement</p>
-        </div>
-        <div className="text-right">
-          <div className="font-mono font-bold">{f.numero}</div>
-          <div className="text-xs text-slate-600">Imprimé le {aujourdhui()}</div>
-        </div>
-      </div>
+      <EnTeteDocument titre="Reçu de paiement">
+        <div className="font-mono font-bold text-slate-900">{f.numero}</div>
+      </EnTeteDocument>
 
       <div>
         <span className="font-semibold">Patient : </span>
@@ -60,6 +54,7 @@ export function Recu({ facture: f }) {
         <span>Caissier : {formatPersonne(f.paiements[f.paiements.length - 1]?.caissier)}</span>
         <span>Signature et cachet</span>
       </div>
+      <PiedDocument />
     </div>
   )
 }
@@ -69,16 +64,9 @@ export function ClotureCaisse({ jour, paiements }) {
   const { parMode, parCaissier, total } = totauxJournal(paiements)
   return (
     <div className="max-w-2xl mx-auto text-slate-900 text-sm space-y-6">
-      <div className="flex justify-between items-start border-b border-slate-300 pb-4">
-        <div>
-          <h1 className="text-xl font-bold">Clinic ERP</h1>
-          <p className="text-xs text-slate-600">Clôture de caisse</p>
-        </div>
-        <div className="text-right">
-          <div className="font-bold">Journée du {formatDate(`${jour}T12:00:00`)}</div>
-          <div className="text-xs text-slate-600">Imprimé le {aujourdhui()}</div>
-        </div>
-      </div>
+      <EnTeteDocument titre="Clôture de caisse">
+        <div className="font-bold text-slate-900">Journée du {formatDate(`${jour}T12:00:00`)}</div>
+      </EnTeteDocument>
 
       <div className="grid grid-cols-2 gap-8">
         <div>
@@ -127,6 +115,7 @@ export function ClotureCaisse({ jour, paiements }) {
         <span>Signature du caissier</span>
         <span className="text-right">Signature du responsable</span>
       </div>
+      <PiedDocument />
     </div>
   )
 }
