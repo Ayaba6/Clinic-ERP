@@ -8,6 +8,7 @@ import PatientsPage from '../modules/reception/pages/PatientsPage'
 import PatientDossierPage from '../modules/reception/pages/PatientDossierPage'
 import QueuePage from '../modules/consultation/pages/QueuePage'
 import ConsultationPage from '../modules/consultation/pages/ConsultationPage'
+import PharmaciePage from '../modules/pharmacie/pages/PharmaciePage'
 import DashboardAdmin from '../modules/admin/pages/DashboardAdmin'
 import StaffManagementPage from '../modules/admin/pages/StaffManagementPage'
 
@@ -72,10 +73,10 @@ export const AppRoutes = () => {
 
           {/* Module Pharmacie */}
           <Route
-            path="/pharmacie/*"
+            path="/pharmacie"
             element={
               <ProtectedRoute allowedRoles={['admin', 'pharmacien']}>
-                <div className="text-2xl font-bold text-slate-800">Espace Pharmacie & Stock</div>
+                <PharmaciePage />
               </ProtectedRoute>
             }
           />

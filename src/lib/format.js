@@ -47,3 +47,13 @@ export function formatAttente(value) {
 export function aujourdhui() {
   return new Date().toLocaleDateString('fr-FR')
 }
+
+// Nombre de jours avant une date (négatif si dépassée)
+export function joursRestants(value) {
+  if (!value) return null
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const cible = new Date(value)
+  cible.setHours(0, 0, 0, 0)
+  return Math.round((cible - today) / 86400000)
+}
