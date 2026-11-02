@@ -6,6 +6,8 @@ import PatientFormModal from '../components/PatientFormModal'
 import SendToConsultationModal from '../components/SendToConsultationModal'
 import InterventionFormModal from '../../bloc/components/InterventionFormModal'
 import GrossesseFormModal from '../../maternite/components/GrossesseFormModal'
+import RdvFormModal from '../../rendezvous/components/RdvFormModal'
+import { useRdvPatient, typeRdv, heure as heureRdv } from '../../rendezvous/hooks/useRendezVous'
 import { useGrossesseEnCours, joursDeGrossesse, formatSA } from '../../maternite/hooks/useMaternite'
 import StatutBadge from '../../../components/ui/StatutBadge'
 import { getAge, formatDate, formatDateTime, formatMontant, formatPersonne } from '../../../lib/format'
@@ -34,6 +36,10 @@ export default function PatientDossierPage() {
   const voitMaternite = ['admin', 'medecin', 'sage_femme', 'infirmier', 'chirurgien'].includes(role)
   const grossesse = useGrossesseEnCours(patient?.id, voitMaternite && patient?.genre === 'F')
   const [grossesseOpen, setGrossesseOpen] = useState(false)
+  const voitRdv = ['admin', 'reception', 'medecin', 'sage_femme', 'infirmier', 'chirurgien'].includes(role)
+  const canRdv = ['admin', 'reception', 'medecin', 'sage_femme'].includes(role)
+  const { rdvs: prochainsRdv, fetchRdvs } = useRdvPatient(patient?.id, voitRdv)
+  const [rdvOpen, setRdvOpen] = useState(false)
 
   const sections = SECTIONS_BY_ROLE[role] || []
   const [activeTab, setActiveTab] = useState(sections[0])
@@ -213,6 +219,31 @@ export default function PatientDossierPage() {
               {patient.allergies || 'Aucune allergie ni antécédent signalé.'}
             </p>
           </div>
+
+          {voitRdv && (
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Rendez-vous à venir</h3>
+                {canRdv && (
+                  <button onClick={() => setRdvOpen(true)} className="text-xs font-medium text-blue-600 hover:underline">+ Prendre RDV</button>
+                )}
+              </div>
+              {prochainsRdv.length === 0 ? (
+                <p className="text-sm text-slate-400 italic">Aucun rendez-vous prévu.</p>
+              ) : (
+                <ul className="space-y-2 text-sm">
+                  {prochainsRdv.map(r => (
+                    <li key={r.id} className="flex items-center justify-between gap-2">
+                      <span className="text-slate-700">
+                        {formatDate(r.date_heure)} {r.heure_a_confirmer ? '(heure à fixer)' : `à ${heureRdv(r.date_heure)}`}
+                      </span>
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-semibold border ${typeRdv(r.type).color}`}>{typeRdv(r.type).label}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Colonne droite : historique */}
@@ -261,6 +292,10 @@ export default function PatientDossierPage() {
           onSubmit={updatePatient}
           onClose={() => setEditOpen(false)}
         />
+      )}
+
+      {rdvOpen && (
+        <RdvFormModal patient={patient} onSaved={fetchRdvs} onClose={() => setRdvOpen(false)} />
       )}
 
       {grossesseOpen && (

@@ -15,6 +15,7 @@ import MaternitePage from '../modules/maternite/pages/MaternitePage'
 import GrossessePage from '../modules/maternite/pages/GrossessePage'
 import SalleNaissancePage from '../modules/naissance/pages/SalleNaissancePage'
 import AccouchementPage from '../modules/naissance/pages/AccouchementPage'
+import RendezVousPage from '../modules/rendezvous/pages/RendezVousPage'
 import DashboardAdmin from '../modules/admin/pages/DashboardAdmin'
 import StaffManagementPage from '../modules/admin/pages/StaffManagementPage'
 import ParametresPage from '../modules/admin/pages/ParametresPage'
@@ -56,6 +57,16 @@ export const AppRoutes = () => {
             element={
               <ProtectedRoute allowedRoles={['admin', 'reception', 'medecin', 'sage_femme', 'infirmier', 'chirurgien', 'pharmacien', 'caisse']}>
                 <PatientDossierPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Rendez-vous */}
+          <Route
+            path="/rendez-vous"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'reception', 'medecin', 'sage_femme', 'infirmier', 'chirurgien']}>
+                <RendezVousPage />
               </ProtectedRoute>
             }
           />

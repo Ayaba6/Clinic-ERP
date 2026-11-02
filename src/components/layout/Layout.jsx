@@ -13,7 +13,8 @@ import {
   ChevronDown,
   Settings,
   Baby,
-  BedDouble
+  BedDouble,
+  CalendarDays
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -33,6 +34,7 @@ export default function Layout() {
 
   const menuItems = [
     { label: 'Réception & Patients', path: '/reception', icon: Users, roles: ['admin', 'reception', 'infirmier'] },
+    { label: 'Rendez-vous', path: '/rendez-vous', icon: CalendarDays, roles: ['admin', 'reception', 'medecin', 'sage_femme', 'infirmier'] },
     { label: 'Maternité', path: '/maternite', icon: Baby, roles: ['admin', 'medecin', 'sage_femme', 'infirmier'] },
     { label: 'Salle de naissance', path: '/naissance', icon: BedDouble, roles: ['admin', 'medecin', 'sage_femme', 'infirmier'] },
     { label: 'Consultations', path: '/consultation', icon: Stethoscope, roles: ['admin', 'medecin', 'sage_femme'] },
