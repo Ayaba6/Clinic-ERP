@@ -50,7 +50,7 @@ export default function RendezVousPage() {
 
       {/* Filtres : vue, date, praticien */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="inline-flex p-1 bg-white border border-slate-200 rounded-xl text-sm">
+        <div className="inline-flex max-w-full overflow-x-auto p-1 bg-white border border-slate-200 rounded-xl text-sm">
           {VUES.map(v => {
             const Icon = v.icon
             return (
@@ -110,8 +110,8 @@ function VueJour({ jour, praticiens, filtre, filtrer, canWrite, onEdit }) {
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-slate-600 capitalize flex items-center gap-2">
-        {libelleJour(jour)} • {liste.filter(r => r.statut !== 'annule').length} rendez-vous
+      <p className="text-sm text-slate-600 flex items-center gap-2">
+        <span className="capitalize">{libelleJour(jour)}</span> • {liste.filter(r => r.statut !== 'annule').length} rendez-vous
         {loading && <Loader2 className="w-4 h-4 animate-spin text-slate-400" />}
       </p>
       {error && <Erreur error={error} />}

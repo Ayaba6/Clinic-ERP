@@ -1,22 +1,25 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useClinique } from '../../lib/clinique'
-import { 
-  Users, 
-  Stethoscope, 
-  Pill, 
-  Activity, 
-  CreditCard, 
-  LayoutDashboard, 
+import { getRole, titreSoignant } from '../../lib/roles'
+import {
+  Users,
+  Stethoscope,
+  Pill,
+  Activity,
+  CreditCard,
+  LayoutDashboard,
   UserCog,
   LogOut,
   ChevronDown,
   Settings,
   Baby,
   BedDouble,
-  CalendarDays
+  CalendarDays,
+  Menu,
+  X
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Layout() {
   const { profile, logout } = useAuth()
@@ -26,6 +29,21 @@ export default function Layout() {
 
   // État ouvert par défaut si on est dans l'admin
   const [adminOpen, setAdminOpen] = useState(location.pathname.startsWith('/admin'))
+  // Sur mobile, le menu est un tiroir fermé par défaut
+  const [menuOuvert, setMenuOuvert] = useState(false)
+
+  // Touche Échap : ferme le tiroir
+  useEffect(() => {
+    if (!menuOuvert) return
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOuvert(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOuvert])
+
+  const aller = (path) => {
+    setMenuOuvert(false)
+    navigate(path)
+  }
 
   const handleLogout = async () => {
     await logout()
@@ -50,16 +68,30 @@ export default function Layout() {
   ]
 
   const isAdmin = profile && profile.role === 'admin'
+  const role = getRole(profile?.role)
 
   return (
-    <div className="flex h-screen bg-slate-100 print:block print:h-auto print:bg-white">
-      {/* Sidebar latérale */}
-      <aside className="print:hidden w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl">
-        <div className="p-6 border-b border-slate-800">
-          <h2 className="text-lg font-bold text-white leading-tight">{clinique.nom}</h2>
-          <p className="text-xs text-slate-400 mt-1 capitalize">
-            Rôle : <span className="text-blue-400 font-medium">{profile?.role}</span>
-          </p>
+    <div className="flex h-dvh bg-slate-100 print:block print:h-auto print:bg-white">
+      {/* Fond sombre derrière le tiroir (mobile) */}
+      {menuOuvert && (
+        <div className="fixed inset-0 z-30 bg-slate-900/50 lg:hidden print:hidden" onClick={() => setMenuOuvert(false)} aria-hidden="true" />
+      )}
+
+      {/* Sidebar : tiroir sur mobile, fixe à partir de lg */}
+      <aside
+        className={`print:hidden fixed inset-y-0 left-0 z-40 w-72 max-w-[85vw] bg-slate-900 text-slate-300 flex flex-col shadow-xl transition-transform duration-200
+          lg:static lg:z-auto lg:w-64 lg:translate-x-0 ${menuOuvert ? 'translate-x-0' : '-translate-x-full'}`}
+      >
+        <div className="p-5 lg:p-6 border-b border-slate-800 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h2 className="text-lg font-bold text-white leading-tight">{clinique.nom}</h2>
+            <p className="text-xs text-slate-400 mt-1">
+              Rôle : <span className="text-blue-400 font-medium">{role.label}</span>
+            </p>
+          </div>
+          <button onClick={() => setMenuOuvert(false)} className="lg:hidden p-1.5 -mr-1.5 text-slate-400 hover:text-white rounded-lg" aria-label="Fermer le menu">
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
@@ -89,8 +121,8 @@ export default function Layout() {
                     return (
                       <button
                         key={sub.path}
-                        onClick={() => navigate(sub.path)}
-                        className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition duration-150 ${
+                        onClick={() => aller(sub.path)}
+                        className={`w-full flex items-center gap-2.5 px-3 py-2.5 lg:py-2 rounded-lg text-sm lg:text-xs font-medium transition duration-150 ${
                           isSubActive
                             ? 'bg-white/10 text-white font-semibold'
                             : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
@@ -116,10 +148,10 @@ export default function Layout() {
               return (
                 <button
                   key={item.path}
-                  onClick={() => navigate(item.path)}
+                  onClick={() => aller(item.path)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-150 ${
-                    isActive 
-                      ? 'bg-blue-600 text-white shadow-md' 
+                    isActive
+                      ? 'bg-blue-600 text-white shadow-md'
                       : 'hover:bg-slate-800 text-slate-300 hover:text-white'
                   }`}
                 >
@@ -142,17 +174,20 @@ export default function Layout() {
       </aside>
 
       {/* Contenu principal */}
-      <div className="flex-1 flex flex-col overflow-hidden print:overflow-visible">
-        <header className="print:hidden h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm">
-          <h1 className="text-lg font-semibold text-slate-800">
-            {profile ? `Bienvenue, Dr./M(e). ${profile.nom}` : 'Tableau de bord'}
+      <div className="flex-1 min-w-0 flex flex-col overflow-hidden print:overflow-visible">
+        <header className="print:hidden h-14 lg:h-16 bg-white border-b border-slate-200 flex items-center gap-3 px-4 sm:px-6 lg:px-8 shadow-sm">
+          <button onClick={() => setMenuOuvert(true)} className="lg:hidden p-2 -ml-2 text-slate-600 hover:text-slate-900 rounded-lg" aria-label="Ouvrir le menu">
+            <Menu className="w-6 h-6" />
+          </button>
+          <h1 className="flex-1 min-w-0 truncate text-base lg:text-lg font-semibold text-slate-800">
+            {profile ? <>Bienvenue, {titreSoignant(profile.role)}{profile.prenom} {profile.nom}</> : 'Tableau de bord'}
           </h1>
-          <div className="text-sm font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 uppercase">
-            {profile?.specialite || profile?.role}
+          <div className="hidden sm:block shrink-0 text-xs lg:text-sm font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 uppercase">
+            {profile?.specialite || role.label}
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-8 print:overflow-visible print:p-0">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 print:overflow-visible print:p-0">
           <Outlet />
         </main>
       </div>

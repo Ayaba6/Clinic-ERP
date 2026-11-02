@@ -30,8 +30,8 @@ export default function InterventionModal({ intervention: i, canManage, onEdit, 
   const ouverte = ['demande', 'programme', 'en_cours'].includes(i.statut)
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm px-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative max-h-[92vh] overflow-y-auto space-y-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-3 sm:p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-5 sm:p-6 relative max-h-[92dvh] overflow-y-auto space-y-5">
         <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-lg">
           <X className="w-5 h-5" />
         </button>

@@ -46,8 +46,8 @@ export default function RdvFormModal({ rdv, patient: patientInitial, defaultDate
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm px-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-3 sm:p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-5 sm:p-6 relative max-h-[92dvh] overflow-y-auto">
         <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-lg">
           <X className="w-5 h-5" />
         </button>
@@ -98,8 +98,8 @@ export default function RdvFormModal({ rdv, patient: patientInitial, defaultDate
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
-            <div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <div className="col-span-2 sm:col-span-1">
               <label className={labelClass}>Date</label>
               <input type="date" name="date" required value={values.date} onChange={handleChange} className={inputClass} />
             </div>
