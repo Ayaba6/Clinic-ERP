@@ -9,6 +9,7 @@ import PatientDossierPage from '../modules/reception/pages/PatientDossierPage'
 import QueuePage from '../modules/consultation/pages/QueuePage'
 import ConsultationPage from '../modules/consultation/pages/ConsultationPage'
 import PharmaciePage from '../modules/pharmacie/pages/PharmaciePage'
+import CaissePage from '../modules/caisse/pages/CaissePage'
 import DashboardAdmin from '../modules/admin/pages/DashboardAdmin'
 import StaffManagementPage from '../modules/admin/pages/StaffManagementPage'
 
@@ -93,10 +94,10 @@ export const AppRoutes = () => {
 
           {/* Module Caisse */}
           <Route
-            path="/caisse/*"
+            path="/caisse"
             element={
               <ProtectedRoute allowedRoles={['admin', 'caisse']}>
-                <div className="text-2xl font-bold text-slate-800">Espace Caisse & Facturation</div>
+                <CaissePage />
               </ProtectedRoute>
             }
           />
