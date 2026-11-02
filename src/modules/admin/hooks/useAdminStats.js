@@ -1,40 +1,33 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
 
-export function useAdminStats() {
-  const [stats, setStats] = useState({
-    totalPatients: 0,
-    totalStaff: 0,
-    lowStockCount: 0,
-    totalRevenue: 0,
-  })
-  const [loading, setLoading] = useState(true)
+// Indicateurs du tableau de bord, calculés par la fonction SQL tableau_de_bord()
+// (voir supabase/tableau_de_bord.sql) pour les `jours` derniers jours.
+export function useAdminStats(jours) {
+  const [result, setResult] = useState({ jours: null, data: null, error: null })
 
   useEffect(() => {
-    async function fetchStats() {
-      try {
-        setLoading(true)
-
-        // Calcul côté base par la fonction stats_admin() (voir supabase/securite.sql) :
-        // une seule requête, sans télécharger les tables médicaments et factures.
-        const { data, error } = await supabase.rpc('stats_admin')
-        if (error) throw error
-
-        setStats({
-          totalPatients: data?.totalPatients || 0,
-          totalStaff: data?.totalStaff || 0,
-          lowStockCount: data?.lowStockCount || 0,
-          totalRevenue: Number(data?.totalRevenue) || 0,
-        })
-      } catch (err) {
-        console.error('Erreur lors du chargement des statistiques admin :', err.message)
-      } finally {
-        setLoading(false)
-      }
+    let cancelled = false
+    supabase.rpc('tableau_de_bord', { p_jours: jours }).then(({ data, error }) => {
+      if (cancelled) return
+      setResult(prev => ({
+        jours,
+        data: error ? prev.data : data,
+        error: error ? error.message : null,
+      }))
+    })
+    return () => {
+      cancelled = true
     }
+  }, [jours])
 
-    fetchStats()
-  }, [])
-
-  return { stats, loading }
+  const loading = result.jours !== jours
+  return {
+    data: result.data,
+    error: result.error,
+    // Premier chargement : rien à afficher encore
+    initialLoading: loading && result.data === null,
+    // Changement de période : l'ancien affichage reste visible, atténué
+    refreshing: loading && result.data !== null,
+  }
 }
