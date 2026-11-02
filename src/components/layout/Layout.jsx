@@ -30,7 +30,7 @@ export default function Layout() {
     { label: 'Réception & Patients', path: '/reception', icon: Users, roles: ['admin', 'reception', 'infirmier'] },
     { label: 'Consultations', path: '/consultation', icon: Stethoscope, roles: ['admin', 'medecin'] },
     { label: 'Pharmacie', path: '/pharmacie', icon: Pill, roles: ['admin', 'pharmacien'] },
-    { label: 'Bloc Opératoire', path: '/bloc', icon: Activity, roles: ['admin', 'chirurgien'] },
+    { label: 'Bloc Opératoire', path: '/bloc', icon: Activity, roles: ['admin', 'chirurgien', 'infirmier'] },
     { label: 'Caisse & Facturation', path: '/caisse', icon: CreditCard, roles: ['admin', 'caisse'] },
   ]
 

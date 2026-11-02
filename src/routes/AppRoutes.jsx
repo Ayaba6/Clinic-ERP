@@ -10,6 +10,7 @@ import QueuePage from '../modules/consultation/pages/QueuePage'
 import ConsultationPage from '../modules/consultation/pages/ConsultationPage'
 import PharmaciePage from '../modules/pharmacie/pages/PharmaciePage'
 import CaissePage from '../modules/caisse/pages/CaissePage'
+import BlocPage from '../modules/bloc/pages/BlocPage'
 import DashboardAdmin from '../modules/admin/pages/DashboardAdmin'
 import StaffManagementPage from '../modules/admin/pages/StaffManagementPage'
 
@@ -84,10 +85,10 @@ export const AppRoutes = () => {
 
           {/* Module Bloc Opératoire */}
           <Route
-            path="/bloc/*"
+            path="/bloc"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'chirurgien']}>
-                <div className="text-2xl font-bold text-slate-800">Espace Bloc Opératoire</div>
+              <ProtectedRoute allowedRoles={['admin', 'chirurgien', 'infirmier']}>
+                <BlocPage />
               </ProtectedRoute>
             }
           />

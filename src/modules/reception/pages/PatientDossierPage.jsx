@@ -4,6 +4,7 @@ import { useAuth } from '../../../context/AuthContext'
 import { usePatientDossier, SECTIONS_BY_ROLE } from '../hooks/usePatientDossier'
 import PatientFormModal from '../components/PatientFormModal'
 import SendToConsultationModal from '../components/SendToConsultationModal'
+import InterventionFormModal from '../../bloc/components/InterventionFormModal'
 import StatutBadge from '../../../components/ui/StatutBadge'
 import { getAge, formatDate, formatDateTime, formatMontant, formatPersonne } from '../../../lib/format'
 import {
@@ -27,16 +28,19 @@ export default function PatientDossierPage() {
   const navigate = useNavigate()
   const { profile } = useAuth()
   const role = profile?.role
-  const { patient, history, loading, error, updatePatient, sendToConsultation, cancelAppointment } = usePatientDossier(id, role)
+  const { patient, history, loading, error, fetchDossier, updatePatient, sendToConsultation, cancelAppointment } = usePatientDossier(id, role)
 
   const sections = SECTIONS_BY_ROLE[role] || []
   const [activeTab, setActiveTab] = useState(sections[0])
   const [editOpen, setEditOpen] = useState(false)
   const [sendOpen, setSendOpen] = useState(false)
+  const [blocOpen, setBlocOpen] = useState(false)
   const [actionError, setActionError] = useState(null)
 
   const canEdit = ['admin', 'reception', 'medecin'].includes(role)
   const canSend = ['admin', 'reception'].includes(role)
+  // Le médecin demande une intervention ; le chirurgien et l'admin la programment directement
+  const blocMode = role === 'medecin' ? 'demande' : ['admin', 'chirurgien'].includes(role) ? 'programmer' : null
   const backPath = ['admin', 'reception', 'infirmier'].includes(role) ? '/reception' : -1
 
   if (loading) {
@@ -102,6 +106,15 @@ export default function PatientDossierPage() {
             >
               <Pencil className="w-4 h-4" />
               <span>Modifier</span>
+            </button>
+          )}
+          {blocMode && (
+            <button
+              onClick={() => setBlocOpen(true)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-slate-300 bg-white rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
+            >
+              <Activity className="w-4 h-4" />
+              <span>{blocMode === 'demande' ? 'Demander une intervention' : 'Programmer au bloc'}</span>
             </button>
           )}
           {canSend && (
@@ -221,6 +234,16 @@ export default function PatientDossierPage() {
           submitLabel="Enregistrer les modifications"
           onSubmit={updatePatient}
           onClose={() => setEditOpen(false)}
+        />
+      )}
+
+      {blocOpen && (
+        <InterventionFormModal
+          mode={blocMode}
+          patient={patient}
+          profile={profile}
+          onSaved={fetchDossier}
+          onClose={() => setBlocOpen(false)}
         />
       )}
 

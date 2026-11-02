@@ -48,7 +48,7 @@ export function usePatientDossier(patientId, role) {
           .order('created_at', { ascending: false }),
         interventions: () => supabase
           .from('interventions_bloc')
-          .select('*, chirurgien:profiles(nom, prenom)')
+          .select('*, chirurgien:profiles!interventions_bloc_chirurgien_principal_id_fkey(nom, prenom)')
           .eq('patient_id', patientId)
           .order('date_programmee', { ascending: false }),
         factures: () => supabase
