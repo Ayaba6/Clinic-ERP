@@ -260,7 +260,7 @@ export default function Layout() {
               (item.path === '/reception' && location.pathname.startsWith('/patients/'))))}
         </nav>
 
-        {/* Administration : tout en bas du menu (réservé à l'admin) */}
+        {/* Administration : tout en bas du menu, s'ouvre vers le bas (réservé à l'admin) */}
         {isAdmin && (
           <div className={`border-t border-white/10 py-3 space-y-1 ${reduit ? 'px-2' : 'px-3'}`}>
             {reduit ? (
@@ -268,8 +268,19 @@ export default function Layout() {
               adminSubMenus.map(sub => lien(sub, location.pathname === sub.path))
             ) : (
               <>
+                <button
+                  onClick={() => setAdminOpen(!adminOpen)}
+                  aria-expanded={adminOpen}
+                  className={`${itemClass(!adminOpen && adminSubMenus.some(sub => location.pathname === sub.path))} justify-between`}
+                >
+                  <span className="flex items-center gap-3">
+                    <Settings className="w-5 h-5" />
+                    Administration
+                  </span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${adminOpen ? 'rotate-180' : ''}`} />
+                </button>
                 {adminOpen && (
-                  <div className="mb-1 ml-5 pl-3 border-l border-white/15 space-y-1">
+                  <div className="mt-1 ml-5 pl-3 border-l border-white/15 space-y-1">
                     {adminSubMenus.map((sub) => {
                       const SubIcon = sub.icon
                       const actif = location.pathname === sub.path
@@ -288,18 +299,6 @@ export default function Layout() {
                     })}
                   </div>
                 )}
-                <button
-                  onClick={() => setAdminOpen(!adminOpen)}
-                  aria-expanded={adminOpen}
-                  className={`${itemClass(!adminOpen && adminSubMenus.some(sub => location.pathname === sub.path))} justify-between`}
-                >
-                  <span className="flex items-center gap-3">
-                    <Settings className="w-5 h-5" />
-                    Administration
-                  </span>
-                  {/* La section s'ouvre vers le haut */}
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${adminOpen ? '' : 'rotate-180'}`} />
-                </button>
               </>
             )}
           </div>
