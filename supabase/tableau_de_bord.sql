@@ -67,12 +67,36 @@ begin
       'ruptures', (select count(*) from public.medicaments where stock_actuel <= 0),
       'stock_bas', (select count(*) from public.medicaments where stock_actuel > 0 and stock_actuel <= seuil_alerte),
       'total_patients', (select count(*) from public.patients),
-      'total_staff', (select count(*) from public.profiles)
+      'total_staff', (select count(*) from public.profiles),
+
+      -- Facturé sur la période (hors factures annulées) : base du taux de recouvrement
+      'facture', (select coalesce(sum(montant_total), 0) from public.factures
+                  where statut <> 'annulee' and created_at >= v_from),
+      -- Impayés de plus de 7 jours : à relancer
+      'impayes_anciens', (select count(*) from public.factures
+                          where statut in ('en_attente', 'partielle') and montant_total > montant_paye
+                            and created_at < now() - interval '7 days'),
+      'impayes_anciens_montant', (select coalesce(sum(montant_total - montant_paye), 0) from public.factures
+                                  where statut in ('en_attente', 'partielle')
+                                    and created_at < now() - interval '7 days'),
+      -- Activité du jour
+      'consultations_jour', (select count(*) from public.consultations where created_at >= v_from_jour),
+      'accouchements_jour', (select count(*) from public.accouchements
+                             where statut = 'accouchee' and accouchement_le >= v_from_jour),
+      'cpn_jour', (select count(*) from public.cpn where date_cpn >= v_from_jour)
     ),
 
-    -- Recettes encaissées par jour (ou par mois), jours sans recette inclus
+    -- Par jour (ou par mois), périodes vides incluses : recettes encaissées
+    -- et activité (consultations, accouchements, CPN, nouveaux patients)
     'recettes_serie', (
-      select json_agg(json_build_object('date', b.d, 'montant', coalesce(s.m, 0)) order by b.d)
+      select json_agg(json_build_object(
+        'date', b.d,
+        'montant', coalesce(s.m, 0),
+        'consultations', coalesce(c.n, 0),
+        'accouchements', coalesce(a.n, 0),
+        'cpn', coalesce(k.n, 0),
+        'patients', coalesce(p.n, 0)
+      ) order by b.d)
       from (
         select generate_series(
           v_debut, v_today,
@@ -80,13 +104,45 @@ begin
         )::date as d
       ) b
       left join (
-        select (date_trunc(case when v_mensuel then 'month' else 'day' end,
-                           created_at at time zone v_tz))::date as d,
+        select (date_trunc(case when v_mensuel then 'month' else 'day' end, created_at at time zone v_tz))::date as d,
                sum(montant) as m
-        from public.paiements
-        where created_at >= v_from
-        group by 1
+        from public.paiements where created_at >= v_from group by 1
       ) s on s.d = b.d
+      left join (
+        select (date_trunc(case when v_mensuel then 'month' else 'day' end, created_at at time zone v_tz))::date as d,
+               count(*) as n
+        from public.consultations where created_at >= v_from group by 1
+      ) c on c.d = b.d
+      left join (
+        select (date_trunc(case when v_mensuel then 'month' else 'day' end, accouchement_le at time zone v_tz))::date as d,
+               count(*) as n
+        from public.accouchements where statut = 'accouchee' and accouchement_le >= v_from group by 1
+      ) a on a.d = b.d
+      left join (
+        select (date_trunc(case when v_mensuel then 'month' else 'day' end, date_cpn at time zone v_tz))::date as d,
+               count(*) as n
+        from public.cpn where date_cpn >= v_from group by 1
+      ) k on k.d = b.d
+      left join (
+        select (date_trunc(case when v_mensuel then 'month' else 'day' end, created_at at time zone v_tz))::date as d,
+               count(*) as n
+        from public.patients where created_at >= v_from group by 1
+      ) p on p.d = b.d
+    ),
+
+    -- Prestations qui rapportent le plus (montant facturé, hors annulations)
+    'top_prestations', (
+      select coalesce(json_agg(json_build_object('libelle', x.description, 'montant', x.mt, 'nombre', x.n)
+                               order by x.mt desc), '[]'::json)
+      from (
+        select lf.description, sum(lf.montant_total) as mt, sum(lf.quantite) as n
+        from public.lignes_facture lf
+        join public.factures f on f.id = lf.facture_id
+        where f.statut <> 'annulee' and f.created_at >= v_from and lf.type_acte <> 'medicament'
+        group by lf.description
+        order by mt desc
+        limit 6
+      ) x
     ),
 
     'par_mode', (

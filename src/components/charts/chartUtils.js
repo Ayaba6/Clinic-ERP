@@ -3,6 +3,8 @@
 export const CHART = {
   series: '#4f8221',
   seriesHover: '#65a02c',
+  // Courbe des mini-tendances (teinte claire de la même gamme)
+  sparkline: '#a6cf74',
   grid: '#e1e0d9',
   axis: '#c3c2b7',
   muted: '#898781',
