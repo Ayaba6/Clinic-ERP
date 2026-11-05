@@ -5,6 +5,11 @@ import { getHomePath } from '../../../lib/roles'
 import { useClinique } from '../../../lib/clinique'
 import { Lock, Mail, AlertCircle, Loader2, Baby, Stethoscope, HeartPulse, MapPin, Eye, EyeOff } from 'lucide-react'
 
+// Photo libre de droits (licence Unsplash) : une maman souriante et son bébé
+const PHOTO_BASE = 'https://images.unsplash.com/photo-1591451855781-9eb0f9726a33?auto=format&fit=crop&q=75'
+// Taille adaptée à l'écran : chargement rapide sur téléphone
+const PHOTO_SRCSET = [640, 1080, 1600, 2200].map(w => `${PHOTO_BASE}&w=${w} ${w}w`).join(', ')
+
 const SERVICES = [
   { icon: Baby, label: 'Maternité et accouchements' },
   { icon: HeartPulse, label: 'Gynécologie-obstétrique' },
@@ -44,12 +49,24 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-dvh grid lg:grid-cols-2 bg-white">
+    <div className="relative min-h-dvh grid lg:grid-cols-[1fr_32rem] overflow-hidden bg-brand-950">
+      {/* Photo de fond : tout l'écran sur mobile, partie gauche sur grand écran */}
+      <img
+        src={`${PHOTO_BASE}&w=1080`}
+        srcSet={PHOTO_SRCSET}
+        sizes="(min-width: 1024px) calc(100vw - 32rem), 100vw"
+        fetchPriority="high"
+        alt="Une maman souriante tenant son bébé"
+        className="absolute inset-x-0 top-0 h-[46dvh] lg:inset-y-0 lg:right-auto lg:h-full w-full lg:w-[calc(100%-32rem)] object-cover object-[62%_30%] lg:object-[50%_20%]"
+      />
+      {/* Voile vert : léger sur les visages (haut), plus dense sous le texte (bas) */}
+      <div
+        className="absolute inset-x-0 top-0 h-[46dvh] lg:inset-y-0 lg:h-auto lg:right-[32rem] bg-gradient-to-t from-brand-950 via-brand-900/30 to-brand-950/30 lg:from-brand-950/95 lg:via-brand-900/45 lg:to-brand-950/40"
+        aria-hidden="true"
+      />
+
       {/* Panneau d'identité (grand écran) */}
-      <aside className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-brand-700 via-brand-800 to-brand-950 text-white p-12">
-        {/* Halos décoratifs */}
-        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-brand-400/20 blur-3xl" aria-hidden="true" />
-        <div className="absolute -bottom-40 -left-24 w-[28rem] h-[28rem] rounded-full bg-or-400/10 blur-3xl" aria-hidden="true" />
+      <aside className="relative hidden lg:flex flex-col justify-between text-white p-12">
 
         <div className="relative flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-white shadow-lg overflow-hidden flex items-center justify-center">
@@ -57,38 +74,39 @@ export default function LoginPage() {
           </div>
           <div>
             <div className="text-xl font-bold">{clinique.nom}</div>
-            <div className="text-sm text-brand-200">{clinique.sous_titre}</div>
+            <div className="text-sm text-brand-100">{clinique.sous_titre}</div>
           </div>
         </div>
 
-        <div className="relative space-y-8 max-w-md">
-          <p className="text-3xl xl:text-4xl font-bold leading-tight">
+        {/* Texte en bas, sous les visages */}
+        <div className="relative space-y-6 max-w-xl">
+          <p className="text-3xl xl:text-4xl font-bold leading-tight drop-shadow-lg">
             « {clinique.slogan} »
           </p>
-          <ul className="space-y-3">
+          <ul className="flex flex-wrap gap-x-6 gap-y-3">
             {SERVICES.map(({ icon: Icon, label }) => (
-              <li key={label} className="flex items-center gap-3 text-brand-50">
-                <span className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-or-300" />
+              <li key={label} className="flex items-center gap-2.5 text-sm text-white drop-shadow">
+                <span className="w-8 h-8 rounded-lg bg-white/15 backdrop-blur flex items-center justify-center">
+                  <Icon className="w-4 h-4 text-or-300" />
                 </span>
                 {label}
               </li>
             ))}
           </ul>
+          {clinique.adresse && (
+            <p className="flex items-center gap-2 text-sm text-brand-100 pt-2 border-t border-white/15">
+              <MapPin className="w-4 h-4" /> {clinique.adresse}
+            </p>
+          )}
         </div>
-
-        {clinique.adresse && (
-          <p className="relative flex items-center gap-2 text-sm text-brand-200">
-            <MapPin className="w-4 h-4" /> {clinique.adresse}
-          </p>
-        )}
       </aside>
 
       {/* Formulaire */}
-      <main className="flex items-center justify-center px-5 py-10 sm:px-10 bg-white">
-        <div className="w-full max-w-sm">
+      <main className="relative flex items-start lg:items-center justify-center px-4 pt-[34dvh] pb-6 sm:px-8 lg:p-12 lg:bg-white">
+        {/* Carte blanche sur la photo (mobile), panneau blanc (grand écran) */}
+        <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:shadow-none lg:rounded-none lg:p-0">
           <div className="text-center mb-8">
-            <img src="/logo.jpeg" alt={clinique.nom} className="mx-auto w-36 h-36 sm:w-40 sm:h-40 object-contain" />
+            <img src="/logo.jpeg" alt={clinique.nom} className="mx-auto w-28 h-28 sm:w-36 sm:h-36 object-contain rounded-full" />
             {/* Le logo porte déjà le nom et le slogan de la clinique */}
             <h1 className="mt-4 text-2xl font-bold text-slate-900">Connexion</h1>
             <p className="mt-1 text-sm text-slate-500">Accédez à votre espace de travail.</p>
