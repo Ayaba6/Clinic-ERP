@@ -36,8 +36,11 @@ const menuItems = [
   { label: 'Caisse & Facturation', path: '/caisse', icon: CreditCard, roles: ['admin', 'caisse'] },
 ]
 
+// Tableau de bord : premier élément du menu (admin)
+const tableauDeBord = { label: 'Tableau de bord', path: '/admin', icon: LayoutDashboard }
+
+// Administration : regroupée tout en bas du menu (admin)
 const adminSubMenus = [
-  { label: 'Tableau de bord', path: '/admin', icon: LayoutDashboard },
   { label: 'Personnel & rôles', path: '/admin/staff', icon: UserCog },
   { label: 'Paramètres de la clinique', path: '/admin/parametres', icon: Settings },
 ]
@@ -90,8 +93,8 @@ export default function Layout() {
   const location = useLocation()
   const grandEcran = useGrandEcran()
 
-  // État ouvert par défaut si on est dans l'admin
-  const [adminOpen, setAdminOpen] = useState(location.pathname.startsWith('/admin'))
+  // Section Administration ouverte par défaut si on est sur l'une de ses pages
+  const [adminOpen, setAdminOpen] = useState(adminSubMenus.some(s => location.pathname === s.path))
   // Sur mobile, le menu est un tiroir fermé par défaut
   const [menuOuvert, setMenuOuvert] = useState(false)
   // Sur grand écran : menu réduit (icônes) ou déplié, et sa largeur
@@ -184,6 +187,24 @@ export default function Layout() {
       : 'text-brand-100/80 hover:bg-white/10 hover:text-white'
   }`
 
+  const lien = (item, actif) => {
+    const Icon = item.icon
+    return (
+      <button
+        key={item.path}
+        onClick={() => aller(item.path)}
+        className={`${itemClass(actif)} relative`}
+        title={reduit ? item.label : undefined}
+        aria-label={reduit ? item.label : undefined}
+        aria-current={actif ? 'page' : undefined}
+      >
+        <Icon className={`w-5 h-5 shrink-0 ${actif ? 'text-brand-600' : ''}`} />
+        {!reduit && <span className="truncate">{item.label}</span>}
+        {actif && <span className={`w-1.5 h-1.5 rounded-full bg-or-400 ${reduit ? 'absolute right-1.5 top-1.5' : 'ml-auto'}`} />}
+      </button>
+    )
+  }
+
   return (
     <div className="flex h-dvh bg-slate-50 print:block print:h-auto print:bg-white">
       {/* Fond sombre derrière le tiroir (mobile) */}
@@ -222,54 +243,10 @@ export default function Layout() {
         </div>
 
         <nav className={`flex-1 py-5 space-y-1 overflow-y-auto overflow-x-hidden [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.2)_transparent] ${reduit ? 'px-2' : 'px-3'}`}>
-          {/* Administration en haut (réservé à l'admin) */}
+          {/* Tableau de bord en premier (réservé à l'admin) */}
           {isAdmin && (
-            <div className="pb-3 mb-3 border-b border-white/10 space-y-1">
-              {reduit ? (
-                // Menu réduit : les pages d'administration directement en icônes
-                adminSubMenus.map((sub) => {
-                  const SubIcon = sub.icon
-                  return (
-                    <button key={sub.path} onClick={() => aller(sub.path)} className={itemClass(location.pathname === sub.path)} title={sub.label} aria-label={sub.label}>
-                      <SubIcon className="w-5 h-5" />
-                    </button>
-                  )
-                })
-              ) : (
-                <>
-                  <button
-                    onClick={() => setAdminOpen(!adminOpen)}
-                    className={`${itemClass(location.pathname.startsWith('/admin') && !adminOpen)} justify-between`}
-                  >
-                    <span className="flex items-center gap-3">
-                      <LayoutDashboard className="w-5 h-5" />
-                      Administration
-                    </span>
-                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${adminOpen ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {adminOpen && (
-                    <div className="mt-1 ml-5 pl-3 border-l border-white/15 space-y-1">
-                      {adminSubMenus.map((sub) => {
-                        const SubIcon = sub.icon
-                        const actif = location.pathname === sub.path
-                        return (
-                          <button
-                            key={sub.path}
-                            onClick={() => aller(sub.path)}
-                            className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition duration-150 ${
-                              actif ? 'bg-white text-brand-800 shadow-sm' : 'text-brand-100/75 hover:text-white hover:bg-white/10'
-                            }`}
-                          >
-                            <SubIcon className="w-4 h-4 shrink-0" />
-                            <span className="truncate">{sub.label}</span>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  )}
-                </>
-              )}
+            <div className="pb-3 mb-3 border-b border-white/10">
+              {lien(tableauDeBord, location.pathname === tableauDeBord.path)}
             </div>
           )}
 
@@ -279,25 +256,54 @@ export default function Layout() {
 
           {menuItems
             .filter(item => profile && item.roles.includes(profile.role))
-            .map((item) => {
-              const Icon = item.icon
-              const actif = location.pathname.startsWith(item.path) ||
-                (item.path === '/reception' && location.pathname.startsWith('/patients/'))
-              return (
-                <button
-                  key={item.path}
-                  onClick={() => aller(item.path)}
-                  className={`${itemClass(actif)} relative`}
-                  title={reduit ? item.label : undefined}
-                  aria-label={reduit ? item.label : undefined}
-                >
-                  <Icon className={`w-5 h-5 shrink-0 ${actif ? 'text-brand-600' : ''}`} />
-                  {!reduit && <span className="truncate">{item.label}</span>}
-                  {actif && <span className={`w-1.5 h-1.5 rounded-full bg-or-400 ${reduit ? 'absolute right-1.5 top-1.5' : 'ml-auto'}`} />}
-                </button>
-              )
-            })}
+            .map(item => lien(item, location.pathname.startsWith(item.path) ||
+              (item.path === '/reception' && location.pathname.startsWith('/patients/'))))}
         </nav>
+
+        {/* Administration : tout en bas du menu (réservé à l'admin) */}
+        {isAdmin && (
+          <div className={`border-t border-white/10 py-3 space-y-1 ${reduit ? 'px-2' : 'px-3'}`}>
+            {reduit ? (
+              // Menu réduit : les pages d'administration directement en icônes
+              adminSubMenus.map(sub => lien(sub, location.pathname === sub.path))
+            ) : (
+              <>
+                {adminOpen && (
+                  <div className="mb-1 ml-5 pl-3 border-l border-white/15 space-y-1">
+                    {adminSubMenus.map((sub) => {
+                      const SubIcon = sub.icon
+                      const actif = location.pathname === sub.path
+                      return (
+                        <button
+                          key={sub.path}
+                          onClick={() => aller(sub.path)}
+                          className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition duration-150 ${
+                            actif ? 'bg-white text-brand-800 shadow-sm' : 'text-brand-100/75 hover:text-white hover:bg-white/10'
+                          }`}
+                        >
+                          <SubIcon className="w-4 h-4 shrink-0" />
+                          <span className="truncate">{sub.label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+                <button
+                  onClick={() => setAdminOpen(!adminOpen)}
+                  aria-expanded={adminOpen}
+                  className={`${itemClass(!adminOpen && adminSubMenus.some(sub => location.pathname === sub.path))} justify-between`}
+                >
+                  <span className="flex items-center gap-3">
+                    <Settings className="w-5 h-5" />
+                    Administration
+                  </span>
+                  {/* La section s'ouvre vers le haut */}
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${adminOpen ? '' : 'rotate-180'}`} />
+                </button>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Utilisateur connecté */}
         <div className="p-3 border-t border-white/10">
