@@ -1,8 +1,8 @@
 // Couleurs des graphiques (palette de référence validée, mode clair).
-// Une seule série : le bleu. Le texte n'utilise jamais la couleur des données.
+// Une seule série : le vert de la clinique. Le texte n'utilise jamais la couleur des données.
 export const CHART = {
-  series: '#2a78d6',
-  seriesHover: '#5598e7',
+  series: '#4f8221',
+  seriesHover: '#65a02c',
   grid: '#e1e0d9',
   axis: '#c3c2b7',
   muted: '#898781',

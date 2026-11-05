@@ -55,3 +55,17 @@ drop trigger if exists trg_maj_parametres_date on public.parametres_clinique;
 create trigger trg_maj_parametres_date
   before update on public.parametres_clinique
   for each row execute function public.maj_parametres_date();
+
+-- ---------------------------------------------------------------------
+-- Identité visuelle (logo) : slogan et nom tel qu'écrit sur le logo
+-- ---------------------------------------------------------------------
+alter table public.parametres_clinique add column if not exists slogan varchar;
+
+update public.parametres_clinique
+set slogan = 'Sauvons d''abord les vies, le reste viendra de lui-même'
+where id = 1 and slogan is null;
+
+-- Orthographe du logo « NEEMATOULLAH » (seulement si le nom n'a pas été personnalisé)
+update public.parametres_clinique
+set nom = 'Clinique Neematoullah'
+where id = 1 and nom = 'Clinique Nematoullah';

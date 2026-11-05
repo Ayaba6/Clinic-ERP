@@ -13,7 +13,7 @@ import {
   CheckCircle2, Printer, ShieldAlert, History,
 } from 'lucide-react'
 
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 const labelClass = 'block text-xs font-semibold text-slate-600 uppercase mb-1'
 
 const EMPTY_LINE = { medicament_id: '', quantite: 1, posologie: '' }
@@ -77,7 +77,7 @@ export default function ConsultationPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96 text-slate-500 gap-2">
-        <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
         <span>Ouverture de la consultation...</span>
       </div>
     )
@@ -88,7 +88,7 @@ export default function ConsultationPage() {
       <div className="max-w-lg mx-auto text-center py-16 space-y-4">
         <p className="text-slate-700 font-semibold">Consultation introuvable ou accès refusé.</p>
         {error && <p className="text-sm text-slate-500">{error}</p>}
-        <Link to="/consultation" className="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline">
+        <Link to="/consultation" className="inline-flex items-center gap-2 text-sm text-brand-600 hover:underline">
           <ArrowLeft className="w-4 h-4" /> Retour à la file d'attente
         </Link>
       </div>
@@ -117,7 +117,7 @@ export default function ConsultationPage() {
             )}
             <button
               onClick={() => navigate('/consultation')}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition"
             >
               Patient suivant
             </button>
@@ -148,7 +148,7 @@ export default function ConsultationPage() {
           <div>
             <div className="flex flex-wrap items-center gap-3">
               <h2 className="text-2xl font-bold text-slate-800">{patient.nom} {patient.prenom}</h2>
-              <span className="font-mono text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-lg">
+              <span className="font-mono text-sm font-medium text-brand-600 bg-brand-50 border border-brand-200 px-2.5 py-0.5 rounded-lg">
                 {patient.code_patient}
               </span>
               <StatutBadge statut={appointment.statut} />
@@ -187,7 +187,7 @@ export default function ConsultationPage() {
           </div>
           <Link
             to={`/maternite/grossesses/${grossesse.id}?passage=${appointment.id}`}
-            className="inline-flex items-center justify-center px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-xl text-sm font-semibold whitespace-nowrap"
+            className="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold whitespace-nowrap"
           >
             Faire la CPN
           </Link>
@@ -353,7 +353,7 @@ export default function ConsultationPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition shadow-sm disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold transition shadow-sm disabled:opacity-50"
               >
                 {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
                 <span>Terminer la consultation</span>

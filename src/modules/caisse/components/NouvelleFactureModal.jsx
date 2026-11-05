@@ -74,9 +74,9 @@ export default function NouvelleFactureModal({ onCreated, onClose }) {
               >
                 <span>
                   <span className="font-medium text-slate-800">{p.nom} {p.prenom}</span>
-                  <span className="ml-2 font-mono text-xs text-blue-600">{p.code_patient}</span>
+                  <span className="ml-2 font-mono text-xs text-brand-600">{p.code_patient}</span>
                 </span>
-                {busyId === p.id ? <Loader2 className="w-4 h-4 animate-spin text-blue-600" /> : <span className="text-xs text-slate-400">{p.telephone}</span>}
+                {busyId === p.id ? <Loader2 className="w-4 h-4 animate-spin text-brand-600" /> : <span className="text-xs text-slate-400">{p.telephone}</span>}
               </button>
             </li>
           ))}

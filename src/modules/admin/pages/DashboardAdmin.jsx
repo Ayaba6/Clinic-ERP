@@ -40,7 +40,7 @@ export default function DashboardAdmin() {
   if (initialLoading) {
     return (
       <div className="flex items-center justify-center h-96 text-slate-500 gap-2">
-        <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
         <span>Chargement du tableau de bord...</span>
       </div>
     )
@@ -193,7 +193,7 @@ export default function DashboardAdmin() {
                 <AlertTriangle className="w-4 h-4 text-[#ec835a]" /> <b>{k.stock_bas}</b> en stock bas
               </span>
             )}
-            <span className="ml-auto text-xs text-blue-600">Voir le stock →</span>
+            <span className="ml-auto text-xs text-brand-600">Voir le stock →</span>
           </Link>
         )}
 
@@ -306,7 +306,7 @@ function Ligne({ label, value, to }) {
     <div className="flex items-center justify-between gap-3">
       <dt className="text-slate-500">{label}</dt>
       <dd className="font-semibold text-slate-800">
-        {to ? <Link to={to} className="hover:text-blue-700">{Number(value).toLocaleString('fr-FR')}</Link> : Number(value).toLocaleString('fr-FR')}
+        {to ? <Link to={to} className="hover:text-brand-700">{Number(value).toLocaleString('fr-FR')}</Link> : Number(value).toLocaleString('fr-FR')}
       </dd>
     </div>
   )

@@ -36,7 +36,7 @@ export default function GrossessePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96 text-slate-500 gap-2">
-        <Loader2 className="w-6 h-6 animate-spin text-pink-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
         <span>Chargement du suivi...</span>
       </div>
     )
@@ -46,7 +46,7 @@ export default function GrossessePage() {
       <div className="max-w-lg mx-auto text-center py-16 space-y-3">
         <p className="font-semibold text-slate-700">Suivi de grossesse introuvable ou accès refusé.</p>
         {error && <p className="text-sm text-slate-500">{error}</p>}
-        <Link to="/maternite" className="text-sm text-pink-600 hover:underline">Retour à la maternité</Link>
+        <Link to="/maternite" className="text-sm text-brand-600 hover:underline">Retour à la maternité</Link>
       </div>
     )
   }
@@ -84,7 +84,7 @@ export default function GrossessePage() {
           <div>
             <div className="flex flex-wrap items-center gap-3">
               <h2 className="text-2xl font-bold text-slate-800">{p.nom} {p.prenom}</h2>
-              <span className="font-mono text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-lg">{p.code_patient}</span>
+              <span className="font-mono text-sm font-medium text-brand-600 bg-brand-50 border border-brand-200 px-2.5 py-0.5 rounded-lg">{p.code_patient}</span>
               <StatutBadge statut={g.statut} />
             </div>
             <p className="text-sm text-slate-500 mt-1">
@@ -116,7 +116,7 @@ export default function GrossessePage() {
                   <BedDouble className="w-4 h-4" /> Admettre en salle de naissance
                 </button>
               )}
-              <button onClick={() => setCpnOpen(true)} className="inline-flex items-center gap-2 px-4 py-2.5 bg-pink-600 hover:bg-pink-700 text-white rounded-xl text-sm font-semibold shadow-sm">
+              <button onClick={() => setCpnOpen(true)} className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold shadow-sm">
                 <Plus className="w-4 h-4" /> Nouvelle CPN
               </button>
             </>

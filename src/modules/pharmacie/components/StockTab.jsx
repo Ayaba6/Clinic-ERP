@@ -57,7 +57,7 @@ export default function StockTab({ medicamentsState }) {
           </div>
           <button
             onClick={() => setModal({ type: 'fiche', medicament: null })}
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm whitespace-nowrap"
+            className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm whitespace-nowrap"
           >
             <Plus className="w-4 h-4" />
             <span>Nouveau</span>
@@ -70,7 +70,7 @@ export default function StockTab({ medicamentsState }) {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
             <span>Chargement du stock...</span>
           </div>
         ) : filtered.length === 0 ? (

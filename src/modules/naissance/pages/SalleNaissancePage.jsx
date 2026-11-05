@@ -47,7 +47,7 @@ export default function SalleNaissancePage() {
           {canWrite && (
             <button
               onClick={() => setAdmission(true)}
-              className="inline-flex items-center justify-center gap-2 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
+              className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
             >
               <Plus className="w-5 h-5" />
               <span>Admettre une parturiente</span>
@@ -63,7 +63,7 @@ export default function SalleNaissancePage() {
                 key={t.key}
                 onClick={() => setTab(t.key)}
                 className={`flex items-center gap-2 px-5 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition ${
-                  tab === t.key ? 'border-pink-600 text-pink-700' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  tab === t.key ? 'border-brand-600 text-pink-700' : 'border-transparent text-slate-500 hover:text-slate-800'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -246,7 +246,7 @@ const Mesure = ({ label, value }) => (
   </div>
 )
 const Chargement = () => (
-  <div className="flex items-center justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-pink-600" /></div>
+  <div className="flex items-center justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-brand-600" /></div>
 )
 const Erreur = ({ error }) => (
   <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">

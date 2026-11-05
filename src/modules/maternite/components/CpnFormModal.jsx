@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { enregistrerCpn, joursDeGrossesse, formatSA, PRESENTATIONS } from '../hooks/useMaternite'
 import { X, Loader2, ShieldAlert, AlertCircle } from 'lucide-react'
 
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-pink-500 outline-none bg-white'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 const labelClass = 'block text-xs font-semibold text-slate-600 uppercase mb-1'
 
 // Prochaine CPN proposée (calendrier OMS 2016 : 8 contacts —
@@ -172,11 +172,11 @@ export default function CpnFormModal({ grossesse: g, appointmentId, onSaved, onC
                 </select>
               </div>
               <label className="flex items-center gap-2 text-sm text-slate-700 pb-2">
-                <input type="checkbox" name="fer_acide_folique" checked={values.fer_acide_folique} onChange={handleChange} className="w-4 h-4 accent-pink-600" />
+                <input type="checkbox" name="fer_acide_folique" checked={values.fer_acide_folique} onChange={handleChange} className="w-4 h-4 accent-brand-600" />
                 Fer + acide folique
               </label>
               <label className="flex items-center gap-2 text-sm text-slate-700 pb-2">
-                <input type="checkbox" name="moustiquaire" checked={values.moustiquaire} onChange={handleChange} className="w-4 h-4 accent-pink-600" />
+                <input type="checkbox" name="moustiquaire" checked={values.moustiquaire} onChange={handleChange} className="w-4 h-4 accent-brand-600" />
                 Moustiquaire imprégnée
               </label>
             </div>
@@ -208,7 +208,7 @@ export default function CpnFormModal({ grossesse: g, appointmentId, onSaved, onC
             <button type="button" onClick={onClose} className="px-4 py-2 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
               Annuler
             </button>
-            <button type="submit" disabled={submitting} className="px-5 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-xl text-sm font-semibold transition flex items-center gap-2 shadow-sm disabled:opacity-50">
+            <button type="submit" disabled={submitting} className="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold transition flex items-center gap-2 shadow-sm disabled:opacity-50">
               {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
               <span>Enregistrer la CPN</span>
             </button>

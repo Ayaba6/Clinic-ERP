@@ -24,7 +24,7 @@ export default function JournalTab({ onPrint }) {
             value={jour}
             max={aujourdhuiISO()}
             onChange={(e) => e.target.value && setJour(e.target.value)}
-            className="px-3 py-2 border border-slate-300 rounded-xl text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border border-slate-300 rounded-xl text-sm bg-white outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
         <button
@@ -40,7 +40,7 @@ export default function JournalTab({ onPrint }) {
 
       {loading ? (
         <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-          <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+          <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
           <span>Chargement du journal...</span>
         </div>
       ) : (
@@ -95,7 +95,7 @@ export default function JournalTab({ onPrint }) {
                     {paiements.map(p => (
                       <tr key={p.id}>
                         <td className="py-2.5 px-5 text-slate-500">{new Date(p.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</td>
-                        <td className="py-2.5 px-5 font-mono text-xs text-blue-600">{p.facture?.numero}</td>
+                        <td className="py-2.5 px-5 font-mono text-xs text-brand-600">{p.facture?.numero}</td>
                         <td className="py-2.5 px-5 text-slate-800">{p.facture?.patient?.nom} {p.facture?.patient?.prenom}</td>
                         <td className="py-2.5 px-5 text-slate-600">{labelMode(p.mode)}{p.reference ? <span className="text-xs text-slate-400"> ({p.reference})</span> : ''}</td>
                         <td className="py-2.5 px-5 text-slate-500 text-xs">{formatPersonne(p.caissier)}</td>

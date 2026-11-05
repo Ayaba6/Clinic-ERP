@@ -66,7 +66,7 @@ export default function FacturesTab({ vue, onOpen }) {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
             <span>Chargement des factures...</span>
           </div>
         ) : filtered.length === 0 ? (
@@ -90,8 +90,8 @@ export default function FacturesTab({ vue, onOpen }) {
                 {filtered.map(f => {
                   const reste = Number(f.montant_total) - Number(f.montant_paye)
                   return (
-                    <tr key={f.id} onClick={() => onOpen(f.id)} className="hover:bg-blue-50/40 cursor-pointer transition">
-                      <td className="py-3 px-5 font-mono font-medium text-blue-600 whitespace-nowrap">{f.numero}</td>
+                    <tr key={f.id} onClick={() => onOpen(f.id)} className="hover:bg-brand-50/40 cursor-pointer transition">
+                      <td className="py-3 px-5 font-mono font-medium text-brand-600 whitespace-nowrap">{f.numero}</td>
                       <td className="py-3 px-5">
                         <div className="font-medium text-slate-800">{f.patient?.nom} {f.patient?.prenom}</div>
                         <div className="text-xs text-slate-400 font-mono">{f.patient?.code_patient}</div>

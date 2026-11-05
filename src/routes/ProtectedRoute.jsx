@@ -32,7 +32,7 @@ export const ProtectedRoute = ({ children, allowedRoles }) => {
         <div className="flex gap-3">
           <Link
             to={getHomePath(profile.role)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow"
+            className="px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition shadow"
           >
             Retour à mon espace
           </Link>

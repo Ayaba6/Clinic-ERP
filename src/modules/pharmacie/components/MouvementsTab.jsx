@@ -5,7 +5,7 @@ import { Loader2, Search } from 'lucide-react'
 
 const TYPES = {
   entree: { label: 'Entrée', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  sortie: { label: 'Sortie', color: 'bg-blue-50 text-blue-700 border-blue-200' },
+  sortie: { label: 'Sortie', color: 'bg-brand-50 text-brand-700 border-brand-200' },
   ajustement: { label: 'Ajustement', color: 'bg-amber-50 text-amber-700 border-amber-200' },
 }
 
@@ -55,7 +55,7 @@ export default function MouvementsTab() {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
             <span>Chargement de l'historique...</span>
           </div>
         ) : filtered.length === 0 ? (

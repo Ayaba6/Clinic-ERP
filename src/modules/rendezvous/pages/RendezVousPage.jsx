@@ -40,7 +40,7 @@ export default function RendezVousPage() {
         {canWrite && (
           <button
             onClick={() => setForm({})}
-            className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
+            className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
           >
             <Plus className="w-5 h-5" />
             <span>Nouveau rendez-vous</span>
@@ -69,7 +69,7 @@ export default function RendezVousPage() {
           </div>
         )}
         {vue !== 'appeler' && jour !== aujourdhuiISO() && (
-          <button onClick={() => setJour(aujourdhuiISO())} className="text-sm font-medium text-blue-600 hover:underline">Aujourd'hui</button>
+          <button onClick={() => setJour(aujourdhuiISO())} className="text-sm font-medium text-brand-600 hover:underline">Aujourd'hui</button>
         )}
         <select value={filtre} onChange={(e) => setFiltre(e.target.value)} className="px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white outline-none">
           <option value="">Tous les praticiens</option>
@@ -170,7 +170,7 @@ function VueSemaine({ jour, filtrer, onPickDay }) {
             return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}` === d
           })
           return (
-            <button key={d} onClick={() => onPickDay(d)} className="text-left bg-white rounded-2xl border border-slate-200 shadow-sm p-3 hover:border-blue-300 transition min-h-32">
+            <button key={d} onClick={() => onPickDay(d)} className="text-left bg-white rounded-2xl border border-slate-200 shadow-sm p-3 hover:border-brand-300 transition min-h-32">
               <div className="flex items-baseline justify-between mb-2">
                 <span className="text-sm font-semibold text-slate-800 capitalize">{libelleJour(d, { weekday: 'short', day: 'numeric' })}</span>
                 <span className="text-xs text-slate-500">{duJour.length}</span>
@@ -182,7 +182,7 @@ function VueSemaine({ jour, filtrer, onPickDay }) {
                     {r.patient?.nom} • {typeRdv(r.type).label}
                   </li>
                 ))}
-                {duJour.length > 6 && <li className="text-xs text-blue-600">+ {duJour.length - 6} autre(s)</li>}
+                {duJour.length > 6 && <li className="text-xs text-brand-600">+ {duJour.length - 6} autre(s)</li>}
               </ul>
             </button>
           )

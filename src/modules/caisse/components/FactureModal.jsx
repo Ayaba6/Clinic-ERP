@@ -4,7 +4,7 @@ import StatutBadge from '../../../components/ui/StatutBadge'
 import { formatDateTime, formatMontant, formatPersonne } from '../../../lib/format'
 import { X, Loader2, Plus, Trash2, Wallet, Printer, Ban, ShieldAlert } from 'lucide-react'
 
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 const labelClass = 'block text-xs font-semibold text-slate-600 uppercase mb-1'
 
 export default function FactureModal({ factureId, onClose, onPrint }) {
@@ -27,7 +27,7 @@ export default function FactureModal({ factureId, onClose, onPrint }) {
 
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
             <span>Chargement de la facture...</span>
           </div>
         ) : error || !facture ? (
@@ -64,7 +64,7 @@ function FactureContent({ facture: f, actionError, onAddLigne, onRemoveLigne, on
         </div>
         <p className="text-sm text-slate-600 mt-1">
           <span className="font-semibold">{f.patient?.nom} {f.patient?.prenom}</span>
-          <span className="font-mono text-xs text-blue-600 ml-2">{f.patient?.code_patient}</span>
+          <span className="font-mono text-xs text-brand-600 ml-2">{f.patient?.code_patient}</span>
           <span className="text-slate-400"> • {formatDateTime(f.created_at)}</span>
         </p>
         {f.statut === 'annulee' && f.motif_annulation && (
@@ -329,7 +329,7 @@ function EncaissementForm({ reste, onSubmit }) {
         <button
           type="submit"
           disabled={busy}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition shadow-sm disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold transition shadow-sm disabled:opacity-50"
         >
           {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wallet className="w-4 h-4" />}
           <span>Encaisser {formatMontant(montant)}</span>

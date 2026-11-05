@@ -4,7 +4,7 @@ import { rechercherPatients } from '../../caisse/hooks/useCaisse'
 import { formatMontant } from '../../../lib/format'
 import { X, Loader2, ShieldAlert, Search } from 'lucide-react'
 
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 const labelClass = 'block text-xs font-semibold text-slate-600 uppercase mb-1'
 const DUREES = [15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360]
 
@@ -102,7 +102,7 @@ export default function InterventionFormModal({ mode, intervention, patient: pat
               <div className="flex items-center justify-between gap-3 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm">
                 <span>
                   <b className="text-slate-800">{patient.nom} {patient.prenom}</b>
-                  <span className="ml-2 font-mono text-xs text-blue-600">{patient.code_patient}</span>
+                  <span className="ml-2 font-mono text-xs text-brand-600">{patient.code_patient}</span>
                 </span>
                 {!intervention && !patientInitial && (
                   <button type="button" onClick={() => setPatient(null)} className="text-xs text-slate-500 hover:text-slate-800">Changer</button>
@@ -204,7 +204,7 @@ export default function InterventionFormModal({ mode, intervention, patient: pat
             <button type="button" onClick={onClose} className="px-4 py-2 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
               Annuler
             </button>
-            <button type="submit" disabled={submitting} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-sm disabled:opacity-50">
+            <button type="submit" disabled={submitting} className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-sm disabled:opacity-50">
               {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
               <span>{programmer ? 'Enregistrer' : 'Envoyer la demande'}</span>
             </button>
@@ -243,7 +243,7 @@ function PatientPicker({ onPick }) {
             <li key={p.id}>
               <button type="button" onClick={() => onPick(p)} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">
                 <b className="text-slate-800">{p.nom} {p.prenom}</b>
-                <span className="ml-2 font-mono text-xs text-blue-600">{p.code_patient}</span>
+                <span className="ml-2 font-mono text-xs text-brand-600">{p.code_patient}</span>
               </button>
             </li>
           ))}

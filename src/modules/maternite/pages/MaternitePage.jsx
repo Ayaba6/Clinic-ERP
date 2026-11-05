@@ -69,7 +69,7 @@ export default function MaternitePage() {
         {canWrite && (
           <button
             onClick={() => setNouvelle(true)}
-            className="inline-flex items-center justify-center gap-2 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
+            className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
           >
             <Plus className="w-5 h-5" />
             <span>Nouveau suivi de grossesse</span>
@@ -101,7 +101,7 @@ export default function MaternitePage() {
                 key={t.key}
                 onClick={() => setTab(t.key)}
                 className={`flex items-center gap-2 px-5 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition ${
-                  tab === t.key ? 'border-pink-600 text-pink-700' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  tab === t.key ? 'border-brand-600 text-pink-700' : 'border-transparent text-slate-500 hover:text-slate-800'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -128,7 +128,7 @@ export default function MaternitePage() {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-            <Loader2 className="w-6 h-6 animate-spin text-pink-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
           </div>
         ) : liste.filter(match).length === 0 ? (
           <div className="text-center py-12 text-sm text-slate-500">

@@ -34,7 +34,7 @@ export default function QueuePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96 text-slate-500 gap-2">
-        <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
         <span>Chargement de la file d'attente...</span>
       </div>
     )
@@ -61,7 +61,7 @@ export default function QueuePage() {
           </div>
           <button
             onClick={() => setNouvelleOpen(true)}
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm"
+            className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm"
           >
             <Plus className="w-4 h-4" />
             <span>Nouvelle consultation</span>
@@ -84,7 +84,7 @@ export default function QueuePage() {
                 {(isMine || isAdmin) && (
                   <button
                     onClick={() => navigate(`/consultation/${a.id}`)}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition shadow-sm"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition shadow-sm"
                   >
                     <span>Reprendre</span>
                     <ArrowRight className="w-4 h-4" />
@@ -109,7 +109,7 @@ export default function QueuePage() {
               <button
                 onClick={() => handleTakeCharge(a.id)}
                 disabled={busyId === a.id}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-medium transition shadow-sm disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition shadow-sm disabled:opacity-50"
               >
                 {busyId === a.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Stethoscope className="w-4 h-4" />}
                 <span>Prendre en charge</span>
@@ -132,7 +132,7 @@ export default function QueuePage() {
               >
                 <span className="font-medium text-slate-800">
                   {a.patient?.nom} {a.patient?.prenom}
-                  <span className="ml-2 font-mono text-xs text-blue-600">{a.patient?.code_patient}</span>
+                  <span className="ml-2 font-mono text-xs text-brand-600">{a.patient?.code_patient}</span>
                 </span>
                 <span className="text-xs text-slate-500">
                   {formatDateTime(a.created_at)}{isAdmin && a.doctor ? ` • ${formatPersonne(a.doctor, 'Dr ')}` : ''}
@@ -161,7 +161,7 @@ function QueueCard({ appointment: a, position, showDoctor, children }) {
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-semibold text-slate-800">{patient.nom} {patient.prenom}</span>
-            <span className="font-mono text-xs text-blue-600">{patient.code_patient}</span>
+            <span className="font-mono text-xs text-brand-600">{patient.code_patient}</span>
             <span className="text-xs text-slate-500">{patient.genre} • {getAge(patient.date_naissance) ?? '–'} ans</span>
             <StatutBadge statut={a.statut} />
           </div>

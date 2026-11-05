@@ -11,7 +11,7 @@ const EMPTY_PATIENT = {
   allergies: '',
 }
 
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none'
 
 // Formulaire patient partagé entre la création (liste) et la modification (dossier).
 // onSubmit doit renvoyer { success, error }.
@@ -120,7 +120,7 @@ export default function PatientFormModal({ title, subtitle, initialValues = EMPT
             <button
               type="submit"
               disabled={submitting}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-sm disabled:opacity-50"
+              className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-sm disabled:opacity-50"
             >
               {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
               <span>{submitLabel}</span>

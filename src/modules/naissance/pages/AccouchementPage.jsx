@@ -16,7 +16,7 @@ import {
   ArrowLeft, Loader2, Baby, AlertCircle, AlertTriangle, FolderOpen, Plus, Ambulance, Ban, Scissors, Printer, HeartPulse, ShieldAlert,
 } from 'lucide-react'
 
-const inputClass = 'w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 outline-none bg-white'
+const inputClass = 'w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 
 export default function AccouchementPage() {
   const { id } = useParams()
@@ -35,7 +35,7 @@ export default function AccouchementPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96 text-slate-500 gap-2">
-        <Loader2 className="w-6 h-6 animate-spin text-pink-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
       </div>
     )
   }
@@ -44,7 +44,7 @@ export default function AccouchementPage() {
       <div className="max-w-lg mx-auto text-center py-16 space-y-3">
         <p className="font-semibold text-slate-700">Admission introuvable ou accès refusé.</p>
         {error && <p className="text-sm text-slate-500">{error}</p>}
-        <Link to="/naissance" className="text-sm text-pink-600 hover:underline">Retour à la salle de naissance</Link>
+        <Link to="/naissance" className="text-sm text-brand-600 hover:underline">Retour à la salle de naissance</Link>
       </div>
     )
   }
@@ -80,7 +80,7 @@ export default function AccouchementPage() {
             <div>
               <div className="flex flex-wrap items-center gap-3">
                 <h2 className="text-2xl font-bold text-slate-800">{m.nom} {m.prenom}</h2>
-                <span className="font-mono text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-lg">{m.code_patient}</span>
+                <span className="font-mono text-sm font-medium text-brand-600 bg-brand-50 border border-brand-200 px-2.5 py-0.5 rounded-lg">{m.code_patient}</span>
                 {enTravail
                   ? <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-pink-50 text-pink-700 border-pink-200">En travail</span>
                   : <StatutBadge statut={a.statut} />}
@@ -109,7 +109,7 @@ export default function AccouchementPage() {
                 <button onClick={() => setBlocOpen(true)} className="inline-flex items-center gap-2 px-3 py-2 border border-slate-300 bg-white rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">
                   <Scissors className="w-4 h-4" /> Césarienne au bloc
                 </button>
-                <button onClick={() => setFormOpen(true)} className="inline-flex items-center gap-2 px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-xl text-sm font-semibold shadow-sm">
+                <button onClick={() => setFormOpen(true)} className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold shadow-sm">
                   <Baby className="w-4 h-4" /> Enregistrer l'accouchement
                 </button>
               </>
@@ -198,7 +198,7 @@ export default function AccouchementPage() {
                         {n.bebe ? `${n.bebe.nom} ${n.bebe.prenom}` : 'Mort-né'}
                         {a.nouveau_nes.length > 1 && <span className="text-xs text-slate-500 font-normal"> (J{n.rang})</span>}
                       </div>
-                      <div className="text-xs text-slate-500">{n.sexe === 'F' ? 'Fille' : 'Garçon'}{n.bebe && <> • <span className="font-mono text-blue-600">{n.bebe.code_patient}</span></>}</div>
+                      <div className="text-xs text-slate-500">{n.sexe === 'F' ? 'Fille' : 'Garçon'}{n.bebe && <> • <span className="font-mono text-brand-600">{n.bebe.code_patient}</span></>}</div>
                     </div>
                     <Baby className="w-5 h-5 text-pink-400" />
                   </div>
@@ -308,7 +308,7 @@ function Surveillance({ accouchement: a, canMesurer, onAdded }) {
                 {LIQUIDES.map(l => <option key={l.key} value={l.key}>{l.label}</option>)}
               </select>
             </Champ>
-            <button type="submit" disabled={busy} className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-sm font-medium disabled:opacity-50">
+            <button type="submit" disabled={busy} className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-medium disabled:opacity-50">
               {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />} Relevé
             </button>
           </div>

@@ -4,7 +4,7 @@ import { formatMontant } from '../../../lib/format'
 import { Loader2, Plus, Pencil, X, ShieldAlert } from 'lucide-react'
 
 const TYPES = { consultation: 'Consultation', medicament: 'Médicament', bloc: 'Bloc opératoire', autre: 'Autre acte' }
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 const labelClass = 'block text-xs font-semibold text-slate-600 uppercase mb-1'
 
 // Grille tarifaire : lecture pour la caisse, modification réservée à l'admin
@@ -21,7 +21,7 @@ export default function TarifsTab({ canEdit }) {
         {canEdit && (
           <button
             onClick={() => setEdit({})}
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm"
+            className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm"
           >
             <Plus className="w-4 h-4" /> Nouveau tarif
           </button>
@@ -33,7 +33,7 @@ export default function TarifsTab({ canEdit }) {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
           </div>
         ) : (
           <table className="w-full text-left border-collapse">
@@ -146,7 +146,7 @@ function TarifFormModal({ tarif, onSubmit, onClose }) {
             />
           </div>
           <label className="flex items-center gap-2 text-sm text-slate-700">
-            <input type="checkbox" name="actif" checked={values.actif} onChange={handleChange} className="w-4 h-4 accent-blue-600" />
+            <input type="checkbox" name="actif" checked={values.actif} onChange={handleChange} className="w-4 h-4 accent-brand-600" />
             Tarif actif (proposé à la caisse)
           </label>
 
@@ -154,7 +154,7 @@ function TarifFormModal({ tarif, onSubmit, onClose }) {
             <button type="button" onClick={onClose} className="px-4 py-2 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
               Annuler
             </button>
-            <button type="submit" disabled={busy} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 disabled:opacity-50">
+            <button type="submit" disabled={busy} className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 disabled:opacity-50">
               {busy && <Loader2 className="w-4 h-4 animate-spin" />}
               <span>Enregistrer</span>
             </button>

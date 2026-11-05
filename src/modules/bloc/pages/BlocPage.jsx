@@ -54,7 +54,7 @@ export default function BlocPage() {
           {canManage && (
             <button
               onClick={() => setForm({})}
-              className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
+              className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
             >
               <Plus className="w-5 h-5" />
               <span>Programmer une intervention</span>
@@ -70,7 +70,7 @@ export default function BlocPage() {
                 key={t.key}
                 onClick={() => setTab(t.key)}
                 className={`flex items-center gap-2 px-5 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition ${
-                  tab === t.key ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  tab === t.key ? 'border-brand-600 text-brand-700' : 'border-transparent text-slate-500 hover:text-slate-800'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -134,7 +134,7 @@ function Planning({ jour, setJour, onOpen }) {
           <button onClick={() => setJour(decaler(jour, 1))} className="p-2 text-slate-500 hover:text-slate-800" title="Jour suivant"><ChevronRight className="w-4 h-4" /></button>
         </div>
         {!estAujourdhui && (
-          <button onClick={() => setJour(isoJour(new Date()))} className="px-3 py-1.5 text-sm font-medium text-blue-600 hover:underline">Aujourd'hui</button>
+          <button onClick={() => setJour(isoJour(new Date()))} className="px-3 py-1.5 text-sm font-medium text-brand-600 hover:underline">Aujourd'hui</button>
         )}
         <span className="text-sm text-slate-600 capitalize">{dateLisible}</span>
         {loading && <Loader2 className="w-4 h-4 animate-spin text-slate-400" />}
@@ -158,8 +158,8 @@ function Planning({ jour, setJour, onOpen }) {
                   <button
                     key={i.id}
                     onClick={() => onOpen(i)}
-                    className={`w-full text-left p-3 rounded-xl border transition hover:border-blue-300 hover:bg-blue-50/30 ${
-                      i.statut === 'en_cours' ? 'border-blue-300 bg-blue-50/40' : 'border-slate-200'
+                    className={`w-full text-left p-3 rounded-xl border transition hover:border-brand-300 hover:bg-brand-50/30 ${
+                      i.statut === 'en_cours' ? 'border-brand-300 bg-brand-50/40' : 'border-slate-200'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2">
@@ -201,12 +201,12 @@ function Demandes({ demandes, onOpen }) {
         <button
           key={i.id}
           onClick={() => onOpen(i)}
-          className="w-full text-left bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-300 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+          className="w-full text-left bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-brand-300 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3"
         >
           <div>
             <div className="font-semibold text-slate-800">{i.libelle_intervention}</div>
             <div className="text-sm text-slate-600">
-              {i.patient?.nom} {i.patient?.prenom} <span className="font-mono text-xs text-blue-600">{i.patient?.code_patient}</span>
+              {i.patient?.nom} {i.patient?.prenom} <span className="font-mono text-xs text-brand-600">{i.patient?.code_patient}</span>
             </div>
             <div className="text-xs text-slate-500 mt-0.5">
               Demandé le {formatDateTime(i.created_at)} par {formatPersonne(i.demandeur, 'Dr ')}
@@ -214,7 +214,7 @@ function Demandes({ demandes, onOpen }) {
             </div>
             {i.notes_preop && <p className="text-xs text-slate-600 mt-1 line-clamp-2">{i.notes_preop}</p>}
           </div>
-          <span className="text-sm font-medium text-blue-600 whitespace-nowrap">Ouvrir →</span>
+          <span className="text-sm font-medium text-brand-600 whitespace-nowrap">Ouvrir →</span>
         </button>
       ))}
     </div>
@@ -242,7 +242,7 @@ function Historique({ onOpen }) {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-12 text-sm text-slate-500">Aucune intervention terminée ou annulée ces 90 derniers jours.</div>
@@ -260,7 +260,7 @@ function Historique({ onOpen }) {
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm">
                 {filtered.map(i => (
-                  <tr key={i.id} onClick={() => onOpen(i)} className="hover:bg-blue-50/40 cursor-pointer">
+                  <tr key={i.id} onClick={() => onOpen(i)} className="hover:bg-brand-50/40 cursor-pointer">
                     <td className="py-3 px-5 text-xs text-slate-500 whitespace-nowrap">{formatDateTime(i.date_programmee || i.created_at)}</td>
                     <td className="py-3 px-5 font-medium text-slate-800">{i.libelle_intervention}</td>
                     <td className="py-3 px-5 text-slate-700">{i.patient?.nom} {i.patient?.prenom}</td>

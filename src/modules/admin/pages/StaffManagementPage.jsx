@@ -46,13 +46,13 @@ export default function StaffManagementPage() {
           <p className="text-sm text-slate-500">Créez les comptes des collaborateurs et attribuez leurs permissions d'accès.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-50 text-brand-700 border border-brand-200 rounded-full text-xs font-semibold">
             <UserCog className="w-4 h-4" />
             <span>{staffList.length} Membre(s) enregistrés</span>
           </div>
           <button
             onClick={() => setCreateOpen(true)}
-            className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
+            className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
           >
             <UserPlus className="w-5 h-5" />
             <span>Nouveau membre</span>
@@ -82,7 +82,7 @@ export default function StaffManagementPage() {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
             <span>Chargement des collaborateurs...</span>
           </div>
         ) : filteredStaff.length === 0 ? (
@@ -112,7 +112,7 @@ export default function StaffManagementPage() {
                       <td className="py-4 px-6">
                         <div className="font-semibold text-slate-800">
                           {staff.nom} {staff.prenom}
-                          {isMe && <span className="ml-2 text-xs font-medium text-blue-600">(vous)</span>}
+                          {isMe && <span className="ml-2 text-xs font-medium text-brand-600">(vous)</span>}
                         </div>
                         <div className="text-xs text-slate-400 font-mono">ID: {staff.id.slice(0, 8)}...</div>
                       </td>
@@ -130,14 +130,14 @@ export default function StaffManagementPage() {
                       </td>
                       <td className="py-4 px-6 text-right">
                         <div className="inline-flex items-center gap-2">
-                          {updatingId === staff.id && <Loader2 className="w-4 h-4 animate-spin text-blue-600" />}
+                          {updatingId === staff.id && <Loader2 className="w-4 h-4 animate-spin text-brand-600" />}
                           <select
                             value={staff.role}
                             // Un admin ne peut pas retirer ses propres droits par erreur
                             disabled={updatingId === staff.id || isMe}
                             title={isMe ? 'Vous ne pouvez pas modifier votre propre rôle' : undefined}
                             onChange={(e) => handleRoleChange(staff.id, e.target.value)}
-                            className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+                            className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-700 outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
                           >
                             {ROLES.map(r => (
                               <option key={r.key} value={r.key}>{r.label}</option>

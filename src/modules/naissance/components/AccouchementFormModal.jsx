@@ -3,7 +3,7 @@ import { terminerAccouchement, MODES } from '../hooks/useNaissance'
 import { PRESENTATIONS } from '../../maternite/hooks/useMaternite'
 import { X, Loader2, ShieldAlert, Plus, Trash2, AlertCircle } from 'lucide-react'
 
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-pink-500 outline-none bg-white'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 const labelClass = 'block text-xs font-semibold text-slate-600 uppercase mb-1'
 
 const pad = (n) => String(n).padStart(2, '0')
@@ -179,7 +179,7 @@ export default function AccouchementFormModal({ accouchement, onSaved, onClose }
                   <div className="inline-flex p-0.5 bg-white border border-slate-200 rounded-lg text-sm">
                     {[['F', 'Fille'], ['M', 'Garçon']].map(([v, l]) => (
                       <button key={v} type="button" onClick={() => setEnfant(i, 'sexe', v)}
-                        className={`px-3 py-1 rounded-md font-medium ${en.sexe === v ? 'bg-pink-600 text-white' : 'text-slate-500'}`}>
+                        className={`px-3 py-1 rounded-md font-medium ${en.sexe === v ? 'bg-brand-600 text-white' : 'text-slate-500'}`}>
                         {l}
                       </button>
                     ))}
@@ -223,7 +223,7 @@ export default function AccouchementFormModal({ accouchement, onSaved, onClose }
               <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-700">
                 {[['reanimation', 'Réanimation'], ['vitamine_k', 'Vitamine K'], ['collyre', 'Collyre'], ['mise_au_sein_precoce', 'Mise au sein précoce']].map(([k, l]) => (
                   <label key={k} className="flex items-center gap-2">
-                    <input type="checkbox" checked={en[k]} onChange={(e) => setEnfant(i, k, e.target.checked)} className="w-4 h-4 accent-pink-600" />
+                    <input type="checkbox" checked={en[k]} onChange={(e) => setEnfant(i, k, e.target.checked)} className="w-4 h-4 accent-brand-600" />
                     {l}
                   </label>
                 ))}
@@ -245,7 +245,7 @@ export default function AccouchementFormModal({ accouchement, onSaved, onClose }
             <button type="button" onClick={onClose} className="px-4 py-2 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">
               Annuler
             </button>
-            <button type="submit" disabled={submitting} className="px-5 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-xl text-sm font-semibold flex items-center gap-2 disabled:opacity-50">
+            <button type="submit" disabled={submitting} className="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold flex items-center gap-2 disabled:opacity-50">
               {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
               Enregistrer l'accouchement
             </button>

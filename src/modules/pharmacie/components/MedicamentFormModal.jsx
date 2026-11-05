@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ShieldAlert, X, Loader2 } from 'lucide-react'
 
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 const labelClass = 'block text-xs font-semibold text-slate-600 uppercase mb-1'
 
 const FORMES = ['Comprimé', 'Gélule', 'Sirop', 'Suspension', 'Injectable', 'Perfusion', 'Pommade', 'Crème', 'Suppositoire', 'Collyre', 'Sachet', 'Autre']
@@ -99,7 +99,7 @@ export default function MedicamentFormModal({ medicament, onSubmit, onClose }) {
             <button
               type="submit"
               disabled={submitting}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-sm disabled:opacity-50"
+              className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-sm disabled:opacity-50"
             >
               {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
               <span>Enregistrer</span>

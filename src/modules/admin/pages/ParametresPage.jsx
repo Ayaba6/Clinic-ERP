@@ -4,10 +4,10 @@ import { useClinique, CliniqueContext } from '../../../lib/clinique'
 import EnTeteDocument, { PiedDocument } from '../../../components/ui/EnTeteDocument'
 import { Loader2, CheckCircle2, ShieldAlert, Save } from 'lucide-react'
 
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 const labelClass = 'block text-xs font-semibold text-slate-600 uppercase mb-1'
 
-const CHAMPS = ['nom', 'sous_titre', 'adresse', 'telephone', 'email', 'mention_documents']
+const CHAMPS = ['nom', 'slogan', 'sous_titre', 'adresse', 'telephone', 'email', 'mention_documents']
 
 // Identité de la clinique imprimée sur les ordonnances, reçus et comptes rendus
 export default function ParametresPage() {
@@ -66,6 +66,10 @@ export default function ParametresPage() {
             <input name="nom" required value={values.nom} onChange={handleChange} className={inputClass} />
           </div>
           <div>
+            <label className={labelClass}>Slogan</label>
+            <input name="slogan" value={values.slogan} onChange={handleChange} className={inputClass} />
+          </div>
+          <div>
             <label className={labelClass}>Sous-titre / spécialités</label>
             <input name="sous_titre" value={values.sous_titre} onChange={handleChange} className={inputClass} />
           </div>
@@ -90,7 +94,7 @@ export default function ParametresPage() {
           </div>
 
           <div className="flex justify-end pt-2">
-            <button type="submit" disabled={busy} className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition disabled:opacity-50">
+            <button type="submit" disabled={busy} className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold transition disabled:opacity-50">
               {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Enregistrer
             </button>

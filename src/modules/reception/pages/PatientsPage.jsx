@@ -30,7 +30,7 @@ export default function PatientsPage() {
         </div>
         {canCreate && <button
           onClick={() => setIsModalOpen(true)}
-          className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
+          className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl font-medium transition shadow-sm"
         >
           <UserPlus className="w-5 h-5" />
           <span>Nouveau Patient</span>
@@ -53,7 +53,7 @@ export default function PatientsPage() {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
             <span>Chargement des patients...</span>
           </div>
         ) : filteredPatients.length === 0 ? (
@@ -76,7 +76,7 @@ export default function PatientsPage() {
               <tbody className="divide-y divide-slate-100 text-sm">
                 {filteredPatients.map((patient) => (
                   <tr key={patient.id} className="hover:bg-slate-50/50 transition">
-                    <td className="py-4 px-6 font-mono font-medium text-blue-600">{patient.code_patient}</td>
+                    <td className="py-4 px-6 font-mono font-medium text-brand-600">{patient.code_patient}</td>
                     <td className="py-4 px-6 font-medium text-slate-800">{patient.nom} {patient.prenom}</td>
                     <td className="py-4 px-6 text-slate-600" title={patient.date_naissance}>
                       {patient.genre} • {getAge(patient.date_naissance) ?? '–'} ans
@@ -96,7 +96,7 @@ export default function PatientsPage() {
                     <td className="py-4 px-6 text-right">
                       <button
                         onClick={() => navigate(`/patients/${patient.id}`)}
-                        className="text-blue-600 hover:text-blue-800 font-medium text-xs bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 transition"
+                        className="text-brand-600 hover:text-brand-800 font-medium text-xs bg-brand-50 px-3 py-1.5 rounded-lg border border-brand-200 transition"
                       >
                         Dossier
                       </button>

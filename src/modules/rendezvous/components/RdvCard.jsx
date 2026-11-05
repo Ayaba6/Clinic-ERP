@@ -40,7 +40,7 @@ export default function RdvCard({ rdv: r, canWrite, showPraticien, onEdit }) {
             <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-semibold border ${type.color}`}>{type.label}</span>
             <BadgeRdv statut={r.statut} />
           </div>
-          <Link to={`/patients/${r.patient?.id}`} className="block mt-1 text-sm font-medium text-slate-800 hover:text-blue-700 truncate">
+          <Link to={`/patients/${r.patient?.id}`} className="block mt-1 text-sm font-medium text-slate-800 hover:text-brand-700 truncate">
             {r.patient?.nom} {r.patient?.prenom}
           </Link>
           <div className="text-xs text-slate-500 flex flex-wrap gap-x-2">
@@ -59,7 +59,7 @@ export default function RdvCard({ rdv: r, canWrite, showPraticien, onEdit }) {
           <button
             onClick={() => run('arrive', () => arriverRdv(r.id))}
             disabled={!!busy}
-            className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold disabled:opacity-50"
+            className="inline-flex items-center gap-1 px-2.5 py-1 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-semibold disabled:opacity-50"
             title="La patiente est arrivée : elle passe en file d'attente"
           >
             {busy === 'arrive' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <LogIn className="w-3.5 h-3.5" />} Arrivé(e)

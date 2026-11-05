@@ -57,7 +57,7 @@ export default function PatientDossierPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96 text-slate-500 gap-2">
-        <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
         <span>Chargement du dossier...</span>
       </div>
     )
@@ -68,7 +68,7 @@ export default function PatientDossierPage() {
       <div className="max-w-lg mx-auto text-center py-16 space-y-4">
         <p className="text-slate-700 font-semibold">Dossier introuvable ou accès refusé.</p>
         {error && <p className="text-sm text-slate-500">{error}</p>}
-        <Link to="/reception" className="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline">
+        <Link to="/reception" className="inline-flex items-center gap-2 text-sm text-brand-600 hover:underline">
           <ArrowLeft className="w-4 h-4" /> Retour à la liste
         </Link>
       </div>
@@ -99,7 +99,7 @@ export default function PatientDossierPage() {
           <div>
             <div className="flex flex-wrap items-center gap-3">
               <h2 className="text-2xl font-bold text-slate-800">{patient.nom} {patient.prenom}</h2>
-              <span className="font-mono text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-lg">
+              <span className="font-mono text-sm font-medium text-brand-600 bg-brand-50 border border-brand-200 px-2.5 py-0.5 rounded-lg">
                 {patient.code_patient}
               </span>
             </div>
@@ -154,7 +154,7 @@ export default function PatientDossierPage() {
               onClick={() => setSendOpen(true)}
               disabled={!!activeAppointment}
               title={activeAppointment ? 'Ce patient est déjà en file d\'attente' : undefined}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-medium transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Send className="w-4 h-4" />
               <span>Envoyer en consultation</span>
@@ -169,11 +169,11 @@ export default function PatientDossierPage() {
 
       {/* Passage en cours */}
       {activeAppointment && (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-blue-50 border border-blue-200 rounded-2xl">
-          <div className="text-sm text-blue-900">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-brand-50 border border-brand-200 rounded-2xl">
+          <div className="text-sm text-brand-900">
             <span className="font-semibold">Passage en cours</span> — <StatutBadge statut={activeAppointment.statut} />{' '}
             {activeAppointment.doctor ? formatPersonne(activeAppointment.doctor, 'Dr ') : 'Premier médecin disponible'}
-            {activeAppointment.motif && <span className="text-blue-700"> • {activeAppointment.motif}</span>}
+            {activeAppointment.motif && <span className="text-brand-700"> • {activeAppointment.motif}</span>}
           </div>
           {canSend && activeAppointment.statut === 'en_attente' && (
             <button
@@ -225,7 +225,7 @@ export default function PatientDossierPage() {
               <div className="flex items-center justify-between gap-2">
                 <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Rendez-vous à venir</h3>
                 {canRdv && (
-                  <button onClick={() => setRdvOpen(true)} className="text-xs font-medium text-blue-600 hover:underline">+ Prendre RDV</button>
+                  <button onClick={() => setRdvOpen(true)} className="text-xs font-medium text-brand-600 hover:underline">+ Prendre RDV</button>
                 )}
               </div>
               {prochainsRdv.length === 0 ? (
@@ -261,7 +261,7 @@ export default function PatientDossierPage() {
                       key={key}
                       onClick={() => setActiveTab(key)}
                       className={`flex items-center gap-2 px-5 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition ${
-                        isActive ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-500 hover:text-slate-800'
+                        isActive ? 'border-brand-600 text-brand-700' : 'border-transparent text-slate-500 hover:text-slate-800'
                       }`}
                     >
                       <Icon className="w-4 h-4" />

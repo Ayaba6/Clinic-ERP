@@ -43,7 +43,7 @@ export default function OrdonnancesTab({ onDelivered }) {
 
       {loading ? (
         <div className="flex items-center justify-center py-16 text-slate-500 gap-2">
-          <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+          <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
           <span>Chargement des ordonnances...</span>
         </div>
       ) : filtered.length === 0 ? (
@@ -109,7 +109,7 @@ function OrdonnanceCard({ ordonnance: o, readOnly, onDeliver }) {
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-semibold text-slate-800">{o.patient?.nom} {o.patient?.prenom}</span>
-            <span className="font-mono text-xs text-blue-600">{o.patient?.code_patient}</span>
+            <span className="font-mono text-xs text-brand-600">{o.patient?.code_patient}</span>
           </div>
           <div className="text-xs text-slate-500 mt-0.5">
             {formatDateTime(o.created_at)} • Prescrit par {formatPersonne(o.doctor, 'Dr ')}
@@ -141,7 +141,7 @@ function OrdonnanceCard({ ordonnance: o, readOnly, onDeliver }) {
                   checked={selected.has(l.id)}
                   disabled={!enAttente || !stockOk}
                   onChange={() => toggle(l.id)}
-                  className="w-4 h-4 accent-blue-600"
+                  className="w-4 h-4 accent-brand-600"
                 />
               )}
               <div className="flex-1">
@@ -172,7 +172,7 @@ function OrdonnanceCard({ ordonnance: o, readOnly, onDeliver }) {
           <button
             onClick={handleDeliver}
             disabled={submitting || selected.size === 0}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition shadow-sm disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold transition shadow-sm disabled:opacity-50"
           >
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <PackageCheck className="w-4 h-4" />}
             <span>Délivrer {selected.size > 0 ? `(${selected.size})` : ''}</span>

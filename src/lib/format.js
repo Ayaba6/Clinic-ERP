@@ -57,3 +57,8 @@ export function joursRestants(value) {
   cible.setHours(0, 0, 0, 0)
   return Math.round((cible - today) / 86400000)
 }
+
+// « mercredi 5 novembre 2026 »
+export function aujourdhuiLong() {
+  return new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+}

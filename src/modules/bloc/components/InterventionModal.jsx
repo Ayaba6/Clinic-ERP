@@ -5,7 +5,7 @@ import StatutBadge from '../../../components/ui/StatutBadge'
 import { getAge, formatDateTime, formatMontant, formatPersonne } from '../../../lib/format'
 import { X, Loader2, ShieldAlert, Play, CheckCircle2, Ban, Pencil, Printer, AlertTriangle, FolderOpen, CalendarPlus } from 'lucide-react'
 
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 const labelClass = 'block text-xs font-semibold text-slate-600 uppercase mb-1'
 
 // Détail d'une intervention et actions selon son statut
@@ -43,7 +43,7 @@ export default function InterventionModal({ intervention: i, canManage, onEdit, 
           </div>
           <p className="text-sm text-slate-600 mt-1">
             <b>{p.nom} {p.prenom}</b>
-            <span className="font-mono text-xs text-blue-600 ml-2">{p.code_patient}</span>
+            <span className="font-mono text-xs text-brand-600 ml-2">{p.code_patient}</span>
             <span className="text-slate-400"> • {p.genre} • {getAge(p.date_naissance) ?? '–'} ans • Groupe {p.groupe_sanguin || 'N/C'}</span>
           </p>
         </div>
@@ -95,7 +95,7 @@ export default function InterventionModal({ intervention: i, canManage, onEdit, 
               <button
                 onClick={() => run({ statut: 'termine', rapport_operatoire: rapport, complications: complications.trim() || null })}
                 disabled={busy || !rapport.trim()}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold disabled:opacity-50"
               >
                 {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
                 Terminer et facturer
@@ -138,7 +138,7 @@ export default function InterventionModal({ intervention: i, canManage, onEdit, 
                 </button>
               )}
               {canManage && i.statut === 'demande' && (
-                <button onClick={() => onEdit(i)} className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium">
+                <button onClick={() => onEdit(i)} className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium">
                   <CalendarPlus className="w-4 h-4" /> Programmer
                 </button>
               )}
@@ -147,13 +147,13 @@ export default function InterventionModal({ intervention: i, canManage, onEdit, 
                   <button onClick={() => onEdit(i)} className="inline-flex items-center gap-2 px-4 py-2 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">
                     <Pencil className="w-4 h-4" /> Modifier
                   </button>
-                  <button onClick={() => run({ statut: 'en_cours' })} disabled={busy} className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium disabled:opacity-50">
+                  <button onClick={() => run({ statut: 'en_cours' })} disabled={busy} className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium disabled:opacity-50">
                     {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />} Démarrer
                   </button>
                 </>
               )}
               {canManage && i.statut === 'en_cours' && (
-                <button onClick={() => setAction('terminer')} className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold">
+                <button onClick={() => setAction('terminer')} className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold">
                   <CheckCircle2 className="w-4 h-4" /> Terminer
                 </button>
               )}

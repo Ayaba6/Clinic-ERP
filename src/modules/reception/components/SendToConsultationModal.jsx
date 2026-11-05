@@ -4,7 +4,7 @@ import { useDoctors } from '../hooks/usePatientDossier'
 import { titreSoignant } from '../../../lib/roles'
 import { useTypesConsultation } from '../../consultation/hooks/useTypesConsultation'
 
-const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white'
+const inputClass = 'w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white'
 
 export default function SendToConsultationModal({ patient, onSubmit, onClose }) {
   const doctors = useDoctors()
@@ -96,7 +96,7 @@ export default function SendToConsultationModal({ patient, onSubmit, onClose }) 
             <button
               type="submit"
               disabled={submitting}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-sm disabled:opacity-50"
+              className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-sm disabled:opacity-50"
             >
               {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               <span>Envoyer</span>

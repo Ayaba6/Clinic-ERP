@@ -1,7 +1,7 @@
 // Rôles de l'application (doivent correspondre à la contrainte profiles_role_check)
 export const ROLES = [
   { key: 'admin', label: 'Administrateur', color: 'bg-slate-100 text-slate-800 border-slate-300' },
-  { key: 'reception', label: 'Réception / Accueil', color: 'bg-blue-50 text-blue-700 border-blue-200' },
+  { key: 'reception', label: 'Réception / Accueil', color: 'bg-brand-50 text-brand-700 border-brand-200' },
   { key: 'medecin', label: 'Médecin', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
   { key: 'sage_femme', label: 'Sage-femme / Maïeuticien', color: 'bg-pink-50 text-pink-700 border-pink-200' },
   { key: 'infirmier', label: 'Infirmier(ère)', color: 'bg-cyan-50 text-cyan-700 border-cyan-200' },

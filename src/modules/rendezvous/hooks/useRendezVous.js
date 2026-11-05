@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
 
 export const TYPES_RDV = [
-  { key: 'consultation', label: 'Consultation', color: 'bg-blue-50 text-blue-700 border-blue-200' },
+  { key: 'consultation', label: 'Consultation', color: 'bg-brand-50 text-brand-700 border-brand-200' },
   { key: 'cpn', label: 'CPN', color: 'bg-pink-50 text-pink-700 border-pink-200' },
   { key: 'echographie', label: 'Échographie', color: 'bg-purple-50 text-purple-700 border-purple-200' },
   { key: 'postnatal', label: 'Postnatale', color: 'bg-rose-50 text-rose-700 border-rose-200' },
@@ -14,7 +14,7 @@ export const typeRdv = (k) => TYPES_RDV.find(t => t.key === k) || TYPES_RDV[TYPE
 
 export const STATUTS_RDV = {
   prevu: { label: 'Prévu', color: 'bg-slate-100 text-slate-700 border-slate-200' },
-  confirme: { label: 'Confirmé', color: 'bg-blue-50 text-blue-700 border-blue-200' },
+  confirme: { label: 'Confirmé', color: 'bg-brand-50 text-brand-700 border-brand-200' },
   arrive: { label: 'Arrivé', color: 'bg-amber-50 text-amber-800 border-amber-200' },
   termine: { label: 'Terminé', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
   absent: { label: 'Absent', color: 'bg-red-50 text-red-700 border-red-200' },
