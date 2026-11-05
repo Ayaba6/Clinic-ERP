@@ -19,9 +19,11 @@ import {
   BedDouble,
   CalendarDays,
   Menu,
-  X
+  X,
+  PanelLeftClose,
+  PanelLeftOpen
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const menuItems = [
   { label: 'Réception & Patients', path: '/reception', icon: Users, roles: ['admin', 'reception', 'infirmier'] },
@@ -40,16 +42,71 @@ const adminSubMenus = [
   { label: 'Paramètres de la clinique', path: '/admin/parametres', icon: Settings },
 ]
 
+// Largeur du menu sur grand écran (px)
+const LARGEUR_REDUITE = 80
+const LARGEUR_MIN = 220
+const LARGEUR_MAX = 380
+const LARGEUR_DEFAUT = 272
+// En dessous de cette largeur pendant le glissement, le menu se réduit
+const SEUIL_REDUCTION = 150
+
+// Préférence du menu, conservée dans ce navigateur (si le stockage est disponible)
+const CLE_MENU = 'clinique:menu'
+function lirePreference() {
+  try {
+    const v = JSON.parse(localStorage.getItem(CLE_MENU) || '{}')
+    return {
+      replie: !!v.replie,
+      largeur: Math.min(LARGEUR_MAX, Math.max(LARGEUR_MIN, Number(v.largeur) || LARGEUR_DEFAUT)),
+    }
+  } catch {
+    return { replie: false, largeur: LARGEUR_DEFAUT }
+  }
+}
+function ecrirePreference(pref) {
+  try {
+    localStorage.setItem(CLE_MENU, JSON.stringify(pref))
+  } catch {
+    // stockage indisponible (navigation privée) : la préférence n'est pas conservée
+  }
+}
+
+// Vrai à partir de 1024 px (point de rupture « lg »)
+function useGrandEcran() {
+  const [grand, setGrand] = useState(() => window.matchMedia('(min-width: 1024px)').matches)
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const onChange = (e) => setGrand(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+  return grand
+}
+
 export default function Layout() {
   const { profile, logout } = useAuth()
   const { clinique } = useClinique()
   const navigate = useNavigate()
   const location = useLocation()
+  const grandEcran = useGrandEcran()
 
   // État ouvert par défaut si on est dans l'admin
   const [adminOpen, setAdminOpen] = useState(location.pathname.startsWith('/admin'))
   // Sur mobile, le menu est un tiroir fermé par défaut
   const [menuOuvert, setMenuOuvert] = useState(false)
+  // Sur grand écran : menu réduit (icônes) ou déplié, et sa largeur
+  const [pref, setPref] = useState(lirePreference)
+  const [glisse, setGlisse] = useState(false)
+  const largeurGlisse = useRef(pref.largeur)
+
+  const reduit = grandEcran && pref.replie
+  const largeur = reduit ? LARGEUR_REDUITE : pref.largeur
+
+  const majPref = (next) => {
+    setPref(next)
+    ecrirePreference(next)
+  }
+  const basculer = () => majPref({ ...pref, replie: !pref.replie })
 
   // Touche Échap : ferme le tiroir
   useEffect(() => {
@@ -58,6 +115,54 @@ export default function Layout() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [menuOuvert])
+
+  // Poignée : on tire le bord du menu pour le redimensionner (ou le réduire)
+  const debutGlisse = (e) => {
+    e.preventDefault()
+    setGlisse(true)
+    // Largeur à retrouver si le glissement se termine en menu réduit
+    const largeurDepart = pref.largeur
+    largeurGlisse.current = largeurDepart
+    const bouger = (ev) => {
+      const x = ev.clientX
+      if (x < SEUIL_REDUCTION) {
+        setPref(p => ({ ...p, replie: true }))
+      } else {
+        const l = Math.min(LARGEUR_MAX, Math.max(LARGEUR_MIN, x))
+        largeurGlisse.current = l
+        setPref(p => ({ ...p, replie: false, largeur: l }))
+      }
+    }
+    const fin = () => {
+      setGlisse(false)
+      window.removeEventListener('pointermove', bouger)
+      window.removeEventListener('pointerup', fin)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+      setPref(p => {
+        const next = { ...p, largeur: p.replie ? largeurDepart : largeurGlisse.current }
+        ecrirePreference(next)
+        return next
+      })
+    }
+    document.body.style.cursor = 'col-resize'
+    document.body.style.userSelect = 'none'
+    window.addEventListener('pointermove', bouger)
+    window.addEventListener('pointerup', fin)
+  }
+
+  // Clavier sur la poignée : flèches pour élargir / rétrécir, Entrée pour réduire / déplier
+  const clavierPoignee = (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault()
+      if (reduit) return majPref({ ...pref, replie: false })
+      const l = Math.min(LARGEUR_MAX, Math.max(LARGEUR_MIN, pref.largeur + (e.key === 'ArrowRight' ? 20 : -20)))
+      majPref({ ...pref, largeur: l })
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      basculer()
+    }
+  }
 
   const aller = (path) => {
     setMenuOuvert(false)
@@ -73,7 +178,7 @@ export default function Layout() {
   const role = getRole(profile?.role)
   const initiales = `${profile?.prenom?.[0] || ''}${profile?.nom?.[0] || ''}`.toUpperCase() || '?'
 
-  const itemClass = (actif) => `w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition duration-150 ${
+  const itemClass = (actif) => `w-full flex items-center ${reduit ? 'justify-center px-0' : 'gap-3 px-3.5'} py-2.5 rounded-xl text-sm font-medium transition duration-150 ${
     actif
       ? 'bg-white text-brand-800 shadow-sm'
       : 'text-brand-100/80 hover:bg-white/10 hover:text-white'
@@ -86,62 +191,91 @@ export default function Layout() {
         <div className="fixed inset-0 z-30 bg-slate-900/50 lg:hidden print:hidden" onClick={() => setMenuOuvert(false)} aria-hidden="true" />
       )}
 
-      {/* Menu latéral : tiroir sur mobile, fixe à partir de lg */}
+      {/* Menu latéral : tiroir sur mobile, fixe (réductible et redimensionnable) à partir de lg */}
       <aside
-        className={`print:hidden fixed inset-y-0 left-0 z-40 w-72 max-w-[85vw] bg-gradient-to-b from-brand-800 via-brand-900 to-brand-950 text-brand-50 flex flex-col shadow-xl transition-transform duration-200
-          lg:static lg:z-auto lg:w-[17rem] lg:translate-x-0 ${menuOuvert ? 'translate-x-0' : '-translate-x-full'}`}
+        style={{ '--largeur-menu': `${largeur}px` }}
+        className={`print:hidden fixed inset-y-0 left-0 z-40 w-72 max-w-[85vw] bg-gradient-to-b from-brand-800 via-brand-900 to-brand-950 text-brand-50 flex flex-col shadow-xl
+          lg:relative lg:z-auto lg:max-w-none lg:w-[var(--largeur-menu)] lg:shrink-0 lg:translate-x-0
+          ${glisse ? '' : 'transition-[transform,width] duration-200'} ${menuOuvert ? 'translate-x-0' : '-translate-x-full'}`}
       >
         {/* Identité de la clinique */}
-        <div className="px-5 pt-6 pb-5 border-b border-white/10 flex items-start gap-3">
-          <LogoPastille />
-          <div className="min-w-0 flex-1">
-            <h2 className="text-base font-bold text-white leading-tight">{clinique.nom}</h2>
-            {clinique.slogan && <p className="text-[11px] text-brand-200/80 leading-snug mt-1">{clinique.slogan}</p>}
-          </div>
+        <div className={`border-b border-white/10 flex ${reduit ? 'flex-col items-center gap-3 px-2 pt-5 pb-4' : 'items-start gap-3 px-5 pt-6 pb-5'}`}>
+          <LogoPastille className={reduit ? 'w-11 h-11' : 'w-12 h-12'} />
+          {!reduit && (
+            <div className="min-w-0 flex-1">
+              <h2 className="text-base font-bold text-white leading-tight">{clinique.nom}</h2>
+              {clinique.slogan && <p className="text-[11px] text-brand-200/80 leading-snug mt-1">{clinique.slogan}</p>}
+            </div>
+          )}
           <button onClick={() => setMenuOuvert(false)} className="lg:hidden p-1.5 -mr-1.5 text-brand-200 hover:text-white rounded-lg" aria-label="Fermer le menu">
             <X className="w-5 h-5" />
           </button>
+          {/* Réduire / déplier (grand écran) */}
+          <button
+            onClick={basculer}
+            className="hidden lg:inline-flex p-1.5 text-brand-200 hover:text-white hover:bg-white/10 rounded-lg"
+            title={reduit ? 'Déplier le menu' : 'Réduire le menu'}
+            aria-label={reduit ? 'Déplier le menu' : 'Réduire le menu'}
+          >
+            {reduit ? <PanelLeftOpen className="w-5 h-5" /> : <PanelLeftClose className="w-5 h-5" />}
+          </button>
         </div>
 
-        <nav className="flex-1 px-3 py-5 space-y-1 overflow-y-auto">
+        <nav className={`flex-1 py-5 space-y-1 overflow-y-auto overflow-x-hidden [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.2)_transparent] ${reduit ? 'px-2' : 'px-3'}`}>
           {/* Administration en haut (réservé à l'admin) */}
           {isAdmin && (
-            <div className="pb-3 mb-3 border-b border-white/10">
-              <button
-                onClick={() => setAdminOpen(!adminOpen)}
-                className={`${itemClass(location.pathname.startsWith('/admin') && !adminOpen)} justify-between`}
-              >
-                <span className="flex items-center gap-3">
-                  <LayoutDashboard className="w-5 h-5" />
-                  Administration
-                </span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${adminOpen ? 'rotate-180' : ''}`} />
-              </button>
+            <div className="pb-3 mb-3 border-b border-white/10 space-y-1">
+              {reduit ? (
+                // Menu réduit : les pages d'administration directement en icônes
+                adminSubMenus.map((sub) => {
+                  const SubIcon = sub.icon
+                  return (
+                    <button key={sub.path} onClick={() => aller(sub.path)} className={itemClass(location.pathname === sub.path)} title={sub.label} aria-label={sub.label}>
+                      <SubIcon className="w-5 h-5" />
+                    </button>
+                  )
+                })
+              ) : (
+                <>
+                  <button
+                    onClick={() => setAdminOpen(!adminOpen)}
+                    className={`${itemClass(location.pathname.startsWith('/admin') && !adminOpen)} justify-between`}
+                  >
+                    <span className="flex items-center gap-3">
+                      <LayoutDashboard className="w-5 h-5" />
+                      Administration
+                    </span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${adminOpen ? 'rotate-180' : ''}`} />
+                  </button>
 
-              {adminOpen && (
-                <div className="mt-1 ml-5 pl-3 border-l border-white/15 space-y-1">
-                  {adminSubMenus.map((sub) => {
-                    const SubIcon = sub.icon
-                    const actif = location.pathname === sub.path
-                    return (
-                      <button
-                        key={sub.path}
-                        onClick={() => aller(sub.path)}
-                        className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition duration-150 ${
-                          actif ? 'bg-white text-brand-800 shadow-sm' : 'text-brand-100/75 hover:text-white hover:bg-white/10'
-                        }`}
-                      >
-                        <SubIcon className="w-4 h-4" />
-                        <span>{sub.label}</span>
-                      </button>
-                    )
-                  })}
-                </div>
+                  {adminOpen && (
+                    <div className="mt-1 ml-5 pl-3 border-l border-white/15 space-y-1">
+                      {adminSubMenus.map((sub) => {
+                        const SubIcon = sub.icon
+                        const actif = location.pathname === sub.path
+                        return (
+                          <button
+                            key={sub.path}
+                            onClick={() => aller(sub.path)}
+                            className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition duration-150 ${
+                              actif ? 'bg-white text-brand-800 shadow-sm' : 'text-brand-100/75 hover:text-white hover:bg-white/10'
+                            }`}
+                          >
+                            <SubIcon className="w-4 h-4 shrink-0" />
+                            <span className="truncate">{sub.label}</span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
 
-          <p className="px-3.5 pb-1 text-[11px] font-semibold uppercase tracking-wider text-brand-300/70">Services</p>
+          {reduit
+            ? <div className="mx-auto w-6 border-t border-white/15 mb-2" aria-hidden="true" />
+            : <p className="px-3.5 pb-1 text-[11px] font-semibold uppercase tracking-wider text-brand-300/70">Services</p>}
 
           {menuItems
             .filter(item => profile && item.roles.includes(profile.role))
@@ -150,10 +284,16 @@ export default function Layout() {
               const actif = location.pathname.startsWith(item.path) ||
                 (item.path === '/reception' && location.pathname.startsWith('/patients/'))
               return (
-                <button key={item.path} onClick={() => aller(item.path)} className={itemClass(actif)}>
-                  <Icon className={`w-5 h-5 ${actif ? 'text-brand-600' : ''}`} />
-                  <span>{item.label}</span>
-                  {actif && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-or-400" />}
+                <button
+                  key={item.path}
+                  onClick={() => aller(item.path)}
+                  className={`${itemClass(actif)} relative`}
+                  title={reduit ? item.label : undefined}
+                  aria-label={reduit ? item.label : undefined}
+                >
+                  <Icon className={`w-5 h-5 shrink-0 ${actif ? 'text-brand-600' : ''}`} />
+                  {!reduit && <span className="truncate">{item.label}</span>}
+                  {actif && <span className={`w-1.5 h-1.5 rounded-full bg-or-400 ${reduit ? 'absolute right-1.5 top-1.5' : 'ml-auto'}`} />}
                 </button>
               )
             })}
@@ -161,14 +301,19 @@ export default function Layout() {
 
         {/* Utilisateur connecté */}
         <div className="p-3 border-t border-white/10">
-          <div className="flex items-center gap-3 px-2 py-2">
-            <div className="w-9 h-9 shrink-0 rounded-full bg-or-400 text-brand-950 font-bold text-sm flex items-center justify-center">
+          <div className={`flex items-center ${reduit ? 'flex-col gap-2 py-1' : 'gap-3 px-2 py-2'}`}>
+            <div
+              className="w-9 h-9 shrink-0 rounded-full bg-or-400 text-brand-950 font-bold text-sm flex items-center justify-center"
+              title={reduit ? `${profile?.prenom || ''} ${profile?.nom || ''} — ${role.label}` : undefined}
+            >
               {initiales}
             </div>
-            <div className="min-w-0 flex-1">
-              <div className="text-sm font-semibold text-white truncate">{profile?.prenom} {profile?.nom}</div>
-              <div className="text-xs text-brand-200/80 truncate">{role.label}</div>
-            </div>
+            {!reduit && (
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-semibold text-white truncate">{profile?.prenom} {profile?.nom}</div>
+                <div className="text-xs text-brand-200/80 truncate">{role.label}</div>
+              </div>
+            )}
             <button
               onClick={handleLogout}
               className="p-2 rounded-lg text-brand-200 hover:text-white hover:bg-white/10 transition"
@@ -178,6 +323,24 @@ export default function Layout() {
               <LogOut className="w-5 h-5" />
             </button>
           </div>
+        </div>
+
+        {/* Poignée : tirer pour redimensionner, double-clic pour réduire / déplier */}
+        <div
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Redimensionner le menu"
+          aria-valuenow={largeur}
+          aria-valuemin={LARGEUR_REDUITE}
+          aria-valuemax={LARGEUR_MAX}
+          tabIndex={0}
+          title="Tirer pour redimensionner • double-clic pour réduire ou déplier"
+          onPointerDown={debutGlisse}
+          onDoubleClick={basculer}
+          onKeyDown={clavierPoignee}
+          className="hidden lg:block absolute top-0 -right-1.5 w-3 h-full cursor-col-resize group z-10 outline-none"
+        >
+          <div className={`mx-auto h-full w-0.5 transition-colors ${glisse ? 'bg-or-400' : 'bg-transparent group-hover:bg-or-400/70 group-focus-visible:bg-or-400'}`} />
         </div>
       </aside>
 
